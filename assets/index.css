@@ -1,4 +1,4 @@
-@import "https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap"; /*! tailwindcss v4.1.16 | MIT License | https://tailwindcss.com */
+@import "https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap"; /*! tailwindcss v4.1.17 | MIT License | https://tailwindcss.com */
 @layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or
     ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
@@ -980,6 +980,9 @@
   .h-\[90vh\] {
     height: 90vh;
   }
+  .h-auto {
+    height: auto;
+  }
   .h-full {
     height: 100%;
   }
@@ -1545,6 +1548,9 @@
   }
   .border-gray-300 {
     border-color: var(--color-gray-300);
+  }
+  .border-gray-500 {
+    border-color: var(--color-gray-500);
   }
   .border-gray-600 {
     border-color: var(--color-gray-600);
@@ -2338,6 +2344,18 @@
   }
   .bg-gray-700 {
     background-color: var(--color-gray-700);
+  }
+  .bg-gray-700\/20 {
+    background-color: #36415333;
+  }
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-gray-700\/20 {
+      background-color: color-mix(
+        in oklab,
+        var(--color-gray-700) 20%,
+        transparent
+      );
+    }
   }
   .bg-gray-700\/40 {
     background-color: #36415366;
@@ -13464,6 +13482,9 @@
     }
     .lg\:hidden {
       display: none;
+    }
+    .lg\:max-h-\[90vh\] {
+      max-height: 90vh;
     }
     .lg\:w-auto {
       width: auto;

@@ -1,7 +1,8 @@
 const __vite__mapDeps = (
   i,
   m = __vite__mapDeps,
-  d = m.f || (m.f = ["assets/SystemGuard.js", "assets/aos.js"]),
+  d = m.f ||
+    (m.f = ["assets/SystemGuard.js", "assets/aos_vendor.js", "assets/aos.js"]),
 ) => i.map((i) => d[i]);
 var v = Object.defineProperty;
 var j = (i, o, a) =>
@@ -20,7 +21,8 @@ import {
   R as I,
   a as z,
   b as C,
-} from "./aos.js";
+} from "./aos_vendor.js";
+import "./aos.js";
 (function () {
   const o = document.createElement("link").relList;
   if (o && o.supports && o.supports("modulepreload")) return;
@@ -903,7 +905,7 @@ const M = c.createContext(),
     });
   },
   Y = c.lazy(() =>
-    P(() => import("./SystemGuard.js"), __vite__mapDeps([0, 1])),
+    P(() => import("./SystemGuard.js"), __vite__mapDeps([0, 1, 2])),
   ),
   L = S(
     [
