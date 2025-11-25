@@ -3,29 +3,29 @@ var ct = Object.defineProperty,
 var xt = Object.getOwnPropertyDescriptors;
 var Ye = Object.getOwnPropertySymbols;
 var ht = Object.prototype.hasOwnProperty,
-  pt = Object.prototype.propertyIsEnumerable;
+  bt = Object.prototype.propertyIsEnumerable;
 var Ve = (t, r, a) =>
     r in t
       ? ct(t, r, { enumerable: !0, configurable: !0, writable: !0, value: a })
       : (t[r] = a),
   W = (t, r) => {
     for (var a in r || (r = {})) ht.call(r, a) && Ve(t, a, r[a]);
-    if (Ye) for (var a of Ye(r)) pt.call(r, a) && Ve(t, a, r[a]);
+    if (Ye) for (var a of Ye(r)) bt.call(r, a) && Ve(t, a, r[a]);
     return t;
   },
   Q = (t, r) => mt(t, xt(r));
 import {
   C as Te,
-  d as bt,
+  d as pt,
   r as n,
   j as e,
-  m as _,
-  A as ut,
-  u as gt,
+  m as U,
+  A as gt,
+  u as ut,
   e as ft,
   l as vt,
 } from "./aos.js";
-import { U as yt, F as wt } from "./index.js";
+import { U as wt, F as yt } from "./index.js";
 import {
   F as jt,
   a as Nt,
@@ -48,7 +48,7 @@ import {
   I as Ae,
   D as ke,
   j as Me,
-  k as be,
+  k as pe,
   l as fe,
   m as Fe,
   n as Pt,
@@ -58,8 +58,8 @@ import {
   q as at,
   Z as ve,
   r as Rt,
-  s as Ut,
-  t as _t,
+  s as _t,
+  t as Ut,
   u as We,
   v as Ge,
   w as me,
@@ -314,7 +314,7 @@ function Jt(t) {
   );
 }
 async function Qt(t, r) {
-  var h, d, y, E, g, k;
+  var h, d, v, E, u, S;
   const a = t.config;
   if (!a || a._retrying) return Promise.reject(t);
   (a._retrying = !0), (a.__retryCount = a.__retryCount || 0);
@@ -323,51 +323,51 @@ async function Qt(t, r) {
       5,
     ),
     x =
-      (E = (y = a.retryDelay) != null ? y : P.api.retryDelay) != null ? E : 1e3,
-    s = (g = t.response) == null ? void 0 : g.status;
+      (E = (v = a.retryDelay) != null ? v : P.api.retryDelay) != null ? E : 1e3,
+    s = (u = t.response) == null ? void 0 : u.status;
   if (
     (s && s >= 400 && s < 500) ||
     t.code === "ECONNABORTED" ||
-    ((k = t.message) != null && k.includes("canceled"))
+    ((S = t.message) != null && S.includes("canceled"))
   )
     return Promise.reject(t);
-  let p = t;
+  let b = t;
   for (; a.__retryCount < c; ) {
     a.__retryCount += 1;
-    const b = x * Math.pow(2, a.__retryCount - 1);
+    const p = x * Math.pow(2, a.__retryCount - 1);
     P.api.trace &&
       H.emit(K.API_TRACE, {
         method: a.method,
         url: a.url,
         retry: a.__retryCount,
-        delay: b,
+        delay: p,
       }),
-      await new Promise((C) => setTimeout(C, b));
+      await new Promise((D) => setTimeout(D, p));
     try {
-      const C = await r(a);
+      const D = await r(a);
       return (
         a.loading === !0 &&
           H.emit(K.API_LOADING, { key: De(a), loading: !1, inFlight: 0 }),
-        C
+        D
       );
-    } catch (C) {
-      if (((p = C), a.__retryCount >= c)) break;
+    } catch (D) {
+      if (((b = D), a.__retryCount >= c)) break;
     }
   }
   return (
     a.loading === !0 &&
       H.emit(K.API_LOADING, { key: De(a), loading: !1, inFlight: 0 }),
-    H.emit(K.ERROR, p),
+    H.emit(K.ERROR, b),
     H.emit(K.API_RETRY_END, {
       method: a.method,
       url: a.url,
       attempts: a.__retryCount,
     }),
-    Promise.reject(p)
+    Promise.reject(b)
   );
 }
-const ye = bt.create(P.api);
-ye.interceptors.request.use(
+const we = pt.create(P.api);
+we.interceptors.request.use(
   (t) => (
     Jt(t),
     t.loading === !0 &&
@@ -375,7 +375,7 @@ ye.interceptors.request.use(
     t
   ),
 );
-ye.interceptors.response.use(
+we.interceptors.response.use(
   (t) => {
     var a;
     const r =
@@ -408,7 +408,7 @@ ye.interceptors.response.use(
           ms: a,
           status: ((x = t.response) == null ? void 0 : x.status) || 0,
         }),
-      Qt(t, ye)
+      Qt(t, we)
     );
   },
 );
@@ -416,21 +416,21 @@ const ie = async (t = "GET", r, a = {}, c = {}) => {
     var h;
     let x;
     function s(d = {}) {
-      const y = encodeURIComponent;
+      const v = encodeURIComponent;
       return Object.keys(d)
-        .map((E) => `${y(E)}=${y(d[E])}`)
+        .map((E) => `${v(E)}=${v(d[E])}`)
         .join("&");
     }
-    const p = W({ method: t.toUpperCase(), url: r }, c);
+    const b = W({ method: t.toUpperCase(), url: r }, c);
     if (["GET", "DELETE", "HEAD"].includes(t.toUpperCase())) {
       if (a && Object.keys(a).length) {
         const d = s(a),
-          y = r.includes("?") ? "&" : "?";
-        p.url = `${r}${y}${d}`;
+          v = r.includes("?") ? "&" : "?";
+        b.url = `${r}${v}${d}`;
       }
-    } else p.data = a;
+    } else b.data = a;
     try {
-      const { data: d } = await ye(p);
+      const { data: d } = await we(b);
       x = d;
     } catch (d) {
       x = ((h = d == null ? void 0 : d.response) == null ? void 0 : h.data) || {
@@ -449,7 +449,7 @@ const ie = async (t = "GET", r, a = {}, c = {}) => {
     delete: (t, r = {}, a = {}) => ie("DELETE", t, r, a),
     head: (t, r = {}, a = {}) => ie("HEAD", t, r, a),
   },
-  xe = () => n.useContext(yt),
+  xe = () => n.useContext(wt),
   Le = {
     hidden: { opacity: 0 },
     visible: {
@@ -485,9 +485,9 @@ function Be() {
       window.matchMedia("(prefers-color-scheme: dark)").matches;
     x(h);
     const d = window.matchMedia("(prefers-color-scheme: dark)"),
-      y = (E) => x(E.matches);
+      v = (E) => x(E.matches);
     return (
-      d.addEventListener("change", y), () => d.removeEventListener("change", y)
+      d.addEventListener("change", v), () => d.removeEventListener("change", v)
     );
   }, []);
   const s = async () => {
@@ -498,7 +498,7 @@ function Be() {
           btoa(window.location.origin)),
         window.location.reload());
     },
-    p = Array.from("FoodEase");
+    b = Array.from("FoodEase");
   return e.jsxs(e.Fragment, {
     children: [
       e.jsx("style", { children: ea }),
@@ -509,7 +509,7 @@ function Be() {
           children: e.jsxs("div", {
             className: "flex items-center justify-between",
             children: [
-              e.jsxs(_.div, {
+              e.jsxs(U.div, {
                 className: "flex items-center gap-3",
                 initial: { x: -50, opacity: 0 },
                 animate: { x: 0, opacity: 1 },
@@ -518,7 +518,7 @@ function Be() {
                   e.jsxs("div", {
                     className: "relative group",
                     children: [
-                      e.jsx(_.div, {
+                      e.jsx(U.div, {
                         className: "relative",
                         animate: { rotate: [0, 360] },
                         transition: {
@@ -532,7 +532,7 @@ function Be() {
                             "text-yellow-300 drop-shadow-lg group-hover:text-yellow-200 transition-colors",
                         }),
                       }),
-                      e.jsx(_.div, {
+                      e.jsx(U.div, {
                         animate: { y: [0, -5, 0] },
                         transition: {
                           duration: 2,
@@ -545,7 +545,7 @@ function Be() {
                             "text-white absolute -right-1 -bottom-1 drop-shadow-md group-hover:scale-110 transition-transform",
                         }),
                       }),
-                      e.jsx(_.div, {
+                      e.jsx(U.div, {
                         className:
                           "absolute inset-0 rounded-full bg-gradient-to-r from-yellow-300/20 to-orange-300/20 blur-xl",
                         animate: {
@@ -558,9 +558,9 @@ function Be() {
                   }),
                   e.jsx("div", {
                     className: "flex",
-                    children: p.map((h, d) =>
+                    children: b.map((h, d) =>
                       e.jsx(
-                        _.span,
+                        U.span,
                         {
                           className:
                             "text-3xl font-black tracking-wider drop-shadow-lg",
@@ -600,13 +600,13 @@ function Be() {
                   }),
                 ],
               }),
-              e.jsxs(_.div, {
+              e.jsxs(U.div, {
                 className: "text-center hidden md:block text-white/95",
                 initial: "hidden",
                 animate: "visible",
                 variants: Le,
                 children: [
-                  e.jsx(_.h2, {
+                  e.jsx(U.h2, {
                     className:
                       "font-bold text-lg drop-shadow-md bg-gradient-to-r bg-clip-text from-orange-200 via-yellow-200 to-rose-200 text-transparent",
                     variants: de,
@@ -619,7 +619,7 @@ function Be() {
                     },
                     children: t.name,
                   }),
-                  e.jsx(_.p, {
+                  e.jsx(U.p, {
                     className:
                       "text-sm bg-gradient-to-r bg-clip-text from-orange-100 via-rose-100 to-yellow-100 text-transparent",
                     variants: de,
@@ -633,7 +633,7 @@ function Be() {
                   }),
                 ],
               }),
-              e.jsxs(_.button, {
+              e.jsxs(U.button, {
                 onClick: () => a(!0),
                 className: `${qe} relative w-12 h-12 rounded-full overflow-hidden border-2 border-white/20 shadow-xl hover:border-orange-300/50 transition-all duration-300`,
                 whileHover: {
@@ -643,7 +643,7 @@ function Be() {
                 },
                 whileTap: { scale: 0.95 },
                 children: [
-                  e.jsx(_.img, {
+                  e.jsx(U.img, {
                     src: t.image,
                     alt: "User avatar",
                     className: "w-full h-full object-cover",
@@ -655,7 +655,7 @@ function Be() {
                       ease: "easeInOut",
                     },
                   }),
-                  e.jsx(_.div, {
+                  e.jsx(U.div, {
                     className:
                       "absolute inset-0 rounded-full border-2 border-orange-300/30",
                     animate: { scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] },
@@ -667,12 +667,12 @@ function Be() {
           }),
         }),
       }),
-      e.jsx(ut, {
+      e.jsx(gt, {
         children:
           r &&
           e.jsxs(e.Fragment, {
             children: [
-              e.jsx(_.div, {
+              e.jsx(U.div, {
                 className:
                   "fixed inset-0 bg-gradient-to-br from-black/70 via-rose-900/50 to-orange-900/50 backdrop-blur-lg z-40",
                 initial: { opacity: 0 },
@@ -680,7 +680,7 @@ function Be() {
                 exit: { opacity: 0 },
                 onClick: () => a(!1),
               }),
-              e.jsxs(_.div, {
+              e.jsxs(U.div, {
                 className: `${Zt} fixed z-50 top-1/2 left-1/2 w-[90%] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-3xl overflow-hidden`,
                 initial: { scale: 0.7, opacity: 0, rotate: -10 },
                 animate: { scale: 1, opacity: 1, rotate: 0 },
@@ -691,13 +691,13 @@ function Be() {
                     className:
                       "relative bg-gradient-to-r from-orange-600/90 via-red-500/90 to-rose-500/90 p-6 text-center backdrop-blur-sm overflow-hidden",
                     children: [
-                      e.jsx(_.div, {
+                      e.jsx(U.div, {
                         className:
                           "absolute inset-0 bg-gradient-to-r from-orange-400/20 to-rose-400/20",
                         animate: { x: ["-100%", "100%", "-100%"] },
                         transition: { duration: 4, repeat: 1 / 0 },
                       }),
-                      e.jsx(_.button, {
+                      e.jsx(U.button, {
                         onClick: () => a(!1),
                         className:
                           "absolute top-4 right-4 text-white/90 hover:text-orange-200 transition-all duration-200 backdrop-blur-sm rounded-full p-1 hover:bg-white/10",
@@ -705,7 +705,7 @@ function Be() {
                         whileTap: { scale: 0.9 },
                         children: e.jsx($e, { size: 22 }),
                       }),
-                      e.jsx(_.img, {
+                      e.jsx(U.img, {
                         src: t.image,
                         alt: "Avatar",
                         className:
@@ -722,7 +722,7 @@ function Be() {
                           boxShadow: "0 0 30px rgba(255, 165, 0, 0.6)",
                         },
                       }),
-                      e.jsx(_.h2, {
+                      e.jsx(U.h2, {
                         className:
                           "text-2xl font-black text-white/95 relative z-10",
                         initial: { y: 10, opacity: 0 },
@@ -730,7 +730,7 @@ function Be() {
                         transition: { delay: 0.3, duration: 0.4 },
                         children: t.name,
                       }),
-                      e.jsx(_.p, {
+                      e.jsx(U.p, {
                         className: "text-orange-100/90 font-bold relative z-10",
                         initial: { y: 10, opacity: 0 },
                         animate: { y: 0, opacity: 1 },
@@ -739,18 +739,18 @@ function Be() {
                       }),
                     ],
                   }),
-                  e.jsxs(_.div, {
+                  e.jsxs(U.div, {
                     className: "p-6 space-y-4 text-gray-100/95 relative z-10",
                     initial: "hidden",
                     animate: "visible",
                     variants: Le,
                     exit: "hidden",
                     children: [
-                      e.jsxs(_.div, {
+                      e.jsxs(U.div, {
                         className: "space-y-3",
                         variants: Le,
                         children: [
-                          e.jsxs(_.div, {
+                          e.jsxs(U.div, {
                             className:
                               "font-bold flex items-center justify-between gap-3 p-3 rounded-xl bg-gradient-to-r from-orange-500/10 to-rose-500/10 border border-white/10 hover:from-orange-500/20 hover:to-rose-500/20 transition-all text-white/90",
                             variants: de,
@@ -768,7 +768,7 @@ function Be() {
                               }),
                             ],
                           }),
-                          e.jsxs(_.div, {
+                          e.jsxs(U.div, {
                             className:
                               "font-bold flex items-center justify-between gap-3 p-3 rounded-xl bg-gradient-to-r from-orange-500/10 to-rose-500/10 border border-white/10 hover:from-orange-500/20 hover:to-rose-500/20 transition-all text-white/90",
                             variants: de,
@@ -786,7 +786,7 @@ function Be() {
                               }),
                             ],
                           }),
-                          e.jsxs(_.div, {
+                          e.jsxs(U.div, {
                             className:
                               "font-bold flex items-center justify-between gap-3 p-3 rounded-xl bg-gradient-to-r from-orange-500/10 to-rose-500/10 border border-white/10 hover:from-orange-500/20 hover:to-rose-500/20 transition-all text-white/90",
                             variants: de,
@@ -806,9 +806,9 @@ function Be() {
                           }),
                         ],
                       }),
-                      e.jsx(_.div, {
+                      e.jsx(U.div, {
                         variants: de,
-                        children: e.jsxs(_.button, {
+                        children: e.jsxs(U.button, {
                           onClick: s,
                           className:
                             "w-full bg-gradient-to-r from-red-500/95 via-rose-500/95 to-red-600/95 text-white font-bold py-4 rounded-2xl hover:from-red-600/95 hover:to-rose-600/95 shadow-2xl flex items-center justify-center gap-2 transition-all duration-300 backdrop-blur-sm border border-white/20 overflow-hidden relative group",
@@ -820,7 +820,7 @@ function Be() {
                           whileTap: { scale: 0.98 },
                           transition: { duration: 0.2 },
                           children: [
-                            e.jsx(_.div, {
+                            e.jsx(U.div, {
                               className:
                                 "absolute inset-0 bg-gradient-to-r from-red-400/20 to-rose-400/20",
                               animate: { x: ["-100%", "100%", "-100%"] },
@@ -846,7 +846,7 @@ function Be() {
 }
 function ta() {
   const { user: t } = xe(),
-    r = gt(),
+    r = ut(),
     c = [
       {
         id: 1,
@@ -967,7 +967,7 @@ function ta() {
                     className:
                       "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6",
                     children: c.map((s) => {
-                      const p = s.icon;
+                      const b = s.icon;
                       return e.jsx(
                         "div",
                         {
@@ -984,7 +984,7 @@ function ta() {
                                     e.jsx("div", {
                                       className:
                                         "p-3 bg-white/20 backdrop-blur-md rounded-xl w-fit mb-4 group-hover:bg-white/30 transition-all duration-300 group-hover:scale-110",
-                                      children: e.jsx(p, {
+                                      children: e.jsx(b, {
                                         size: 32,
                                         className:
                                           "group-hover:rotate-12 transition-transform duration-300",
@@ -1263,7 +1263,7 @@ function aa() {
     ],
   });
 }
-const ue = "https://via.placeholder.com/64x64/4f46e5/ffffff?text=U",
+const ge = "https://via.placeholder.com/64x64/4f46e5/ffffff?text=U",
   ra = () =>
     e.jsx(e.Fragment, {
       children: e.jsxs("div", {
@@ -1367,12 +1367,12 @@ function oa() {
   const { user: t } = xe(),
     [r, a] = n.useState([]),
     [c, x] = n.useState(!0),
-    [s, p] = n.useState(null),
+    [s, b] = n.useState(null),
     [h, d] = n.useState(null),
-    [y, E] = n.useState(!1),
-    [g, k] = n.useState(null),
-    [b, C] = n.useState(!1),
-    [j, A] = n.useState({
+    [v, E] = n.useState(!1),
+    [u, S] = n.useState(null),
+    [p, D] = n.useState(!1),
+    [j, T] = n.useState({
       phone: "",
       email: "",
       name: "",
@@ -1382,18 +1382,18 @@ function oa() {
       status: !0,
       lastActive: new Date().toISOString(),
     }),
-    [f, $] = n.useState({}),
-    [z, N] = n.useState(!1),
-    [u, M] = n.useState(""),
-    [S, T] = n.useState("all"),
-    [w, v] = n.useState(null),
-    [F, o] = n.useState(null);
+    [k, w] = n.useState({}),
+    [F, N] = n.useState(!1),
+    [g, M] = n.useState(""),
+    [C, A] = n.useState("all"),
+    [y, f] = n.useState(null),
+    [z, o] = n.useState(null);
   n.useEffect(() => {
     R();
   }, []);
   const R = async () => {
       try {
-        x(!0), p(null);
+        x(!0), b(null);
         const {
           error: i,
           data: I = [],
@@ -1403,9 +1403,9 @@ function oa() {
           {},
           { headers: { "Content-Type": "application/json" } },
         );
-        i ? (p(l), O(l, "error")) : a(I);
+        i ? (b(l), O(l, "error")) : a(I);
       } catch (i) {
-        p(i.message), O("Failed to load users", "error");
+        b(i.message), O("Failed to load users", "error");
       } finally {
         x(!1);
       }
@@ -1416,24 +1416,24 @@ function oa() {
     J = n.useMemo(
       () =>
         r.filter((i) => {
-          var U, L, B, m, X;
-          const I = u.toLowerCase(),
+          var _, L, B, m, X;
+          const I = g.toLowerCase(),
             l =
-              !u ||
-              ((L = (U = i.name) == null ? void 0 : U.toLowerCase()) == null
+              !g ||
+              ((L = (_ = i.name) == null ? void 0 : _.toLowerCase()) == null
                 ? void 0
                 : L.includes(I)) ||
-              ((B = i.number) == null ? void 0 : B.includes(u)) ||
+              ((B = i.number) == null ? void 0 : B.includes(g)) ||
               ((X = (m = i.id) == null ? void 0 : m.toLowerCase()) == null
                 ? void 0
                 : X.includes(I)),
-            D =
-              S === "all" ||
-              (S === "iphone" && i.isIphone) ||
-              (S === "android" && !i.isIphone);
-          return l && D;
+            $ =
+              C === "all" ||
+              (C === "iphone" && i.isIphone) ||
+              (C === "android" && !i.isIphone);
+          return l && $;
         }),
-      [r, u, S],
+      [r, g, C],
     ),
     ee = () => {
       const i = {},
@@ -1443,14 +1443,14 @@ function oa() {
           (i.empNo = `Prudent ID must start with 'PTPL' followed by up to 3 digits (current: ${I})`),
         (!j.amount || j.amount < 0) &&
           (i.amount = "Amount must be a valid positive number"),
-        $(i),
+        w(i),
         Object.keys(i).length === 0
       );
     },
     se = async (i) => {
-      v(null);
+      f(null);
       try {
-        C(!0);
+        D(!0);
         const { error: I } = await re.delete(`/foodease/users/${i}`, {
           headers: { "Content-Type": "application/json" },
         });
@@ -1459,12 +1459,12 @@ function oa() {
       } catch (I) {
         console.log(I, "fail"), O("Failed to delete user", "error");
       } finally {
-        C(!1);
+        D(!1);
       }
     },
     le = () => {
-      k(null),
-        A({
+      S(null),
+        T({
           phone: "",
           email: "",
           name: "",
@@ -1474,30 +1474,30 @@ function oa() {
           status: !0,
           lastActive: new Date().toISOString(),
         }),
-        $({}),
+        w({}),
         E(!0);
     },
     he = (i) => {
-      k(i), A(Q(W({}, i), { empNo: i.empNo || i.id || "PTPL" })), $({}), E(!0);
+      S(i), T(Q(W({}, i), { empNo: i.empNo || i.id || "PTPL" })), w({}), E(!0);
     },
     q = async () => {
       if (ee())
         try {
-          C(!0);
+          D(!0);
           const i = W({}, j),
             { error: I, message: l } = await re[
-              g != null && g.id ? "put" : "post"
-            ](`/foodease/users${g != null && g.id ? `/${g.id}` : ""}`, i);
+              u != null && u.id ? "put" : "post"
+            ](`/foodease/users${u != null && u.id ? `/${u.id}` : ""}`, i);
           I
             ? O(l, "error")
             : O(
-                `User ${g != null && g.id ? "updated" : "created"} successfully`,
+                `User ${u != null && u.id ? "updated" : "created"} successfully`,
                 "success",
               ),
             await R(),
             E(!1),
-            k(null),
-            A({
+            S(null),
+            T({
               phone: "",
               email: "",
               name: "",
@@ -1510,13 +1510,13 @@ function oa() {
         } catch (i) {
           console.log(i, "fail"), O("Failed to save user", "error");
         } finally {
-          C(!1);
+          D(!1);
         }
     },
     G = () => {
       E(!1),
-        k(null),
-        A({
+        S(null),
+        T({
           phone: "",
           email: "",
           name: "",
@@ -1526,9 +1526,9 @@ function oa() {
           status: !0,
           lastActive: new Date().toISOString(),
         }),
-        $({});
+        w({});
     },
-    pe = j.empNo.substring(4) || "",
+    be = j.empNo.substring(4) || "",
     oe = (i) =>
       new Date(i).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
   return e.jsxs("div", {
@@ -1692,7 +1692,7 @@ function oa() {
                                     className:
                                       "w-16 h-16 rounded-full object-cover border-2 border-cyan-500/50 group-hover:border-emerald-400/60 shadow-md transition-all duration-400 hover:rotate-6 hover:scale-110",
                                     onError: (I) => {
-                                      I.target.src = ue;
+                                      I.target.src = ge;
                                     },
                                   }),
                                   e.jsx("div", {
@@ -1792,7 +1792,7 @@ function oa() {
                                     className:
                                       "text-gray-400 flex items-center gap-1",
                                     children: [
-                                      e.jsx(be, { className: "w-3 h-3" }),
+                                      e.jsx(pe, { className: "w-3 h-3" }),
                                       " Device:",
                                     ],
                                   }),
@@ -1841,7 +1841,7 @@ function oa() {
                               }),
                               e.jsx("button", {
                                 onClick: (I) => {
-                                  I.stopPropagation(), v(i.id);
+                                  I.stopPropagation(), f(i.id);
                                 },
                                 className:
                                   "flex-1 bg-gradient-to-r from-rose-600/30 to-orange-600/30 hover:from-rose-600/50 hover:to-orange-600/50 border border-rose-500/40 hover:border-lime-400/50 p-2.5 rounded-lg text-rose-300 hover:text-orange-200 transition-all duration-400 font-medium text-sm group/delete hover:scale-105",
@@ -1900,12 +1900,12 @@ function oa() {
                       children: "✕",
                     }),
                     e.jsx("img", {
-                      src: h.image || ue,
+                      src: h.image || ge,
                       alt: "Avatar",
                       className:
                         "w-24 h-24 rounded-full object-cover mx-auto border-4 border-white shadow-xl mb-4 hover:scale-110 transition-all duration-400",
                       onError: (i) => {
-                        i.target.src = ue;
+                        i.target.src = ge;
                       },
                     }),
                     e.jsx("h2", {
@@ -2000,7 +2000,7 @@ function oa() {
                           className:
                             "text-gray-400 text-xs mb-1 flex items-center gap-1",
                           children: [
-                            e.jsx(be, { className: "w-4 h-4" }),
+                            e.jsx(pe, { className: "w-4 h-4" }),
                             " Device",
                           ],
                         }),
@@ -2036,7 +2036,7 @@ function oa() {
             }),
           ],
         }),
-      y &&
+      v &&
         e.jsxs(e.Fragment, {
           children: [
             e.jsx("div", {
@@ -2055,13 +2055,13 @@ function oa() {
                     e.jsx("h2", {
                       className:
                         "text-2xl font-bold text-white hover:text-violet-200 transition-colors duration-400",
-                      children: g ? "Edit User" : "Add New User",
+                      children: u ? "Edit User" : "Add New User",
                     }),
                     e.jsx("p", {
                       className:
                         "text-rose-100 text-sm mt-1 hover:text-rose-200 transition-colors duration-400",
-                      children: g
-                        ? `Updating: ${g.name}`
+                      children: u
+                        ? `Updating: ${u.name}`
                         : "Enter details below – Name, Phone, Email auto-generated from Prudent ID",
                     }),
                   ],
@@ -2083,14 +2083,14 @@ function oa() {
                         e.jsx("input", {
                           type: "text",
                           placeholder: "e.g., 001",
-                          value: pe,
+                          value: be,
                           onChange: (i) =>
-                            A(
+                            T(
                               Q(W({}, j), {
                                 empNo: `PTPL${i.target.value.replace(/\D/g, "").slice(0, 3)}`,
                               }),
                             ),
-                          className: `w-full p-3 rounded-lg bg-gradient-to-r from-slate-700/60 to-violet-800/50 border-2 text-white placeholder-gray-500 focus:ring-2 transition-all duration-400 outline-none hover:border-lime-400/50 hover:shadow-md ${f.empNo ? "border-rose-500 focus:ring-rose-500/50" : "border-cyan-500/30 focus:border-emerald-400 focus:ring-emerald-500/50"}`,
+                          className: `w-full p-3 rounded-lg bg-gradient-to-r from-slate-700/60 to-violet-800/50 border-2 text-white placeholder-gray-500 focus:ring-2 transition-all duration-400 outline-none hover:border-lime-400/50 hover:shadow-md ${k.empNo ? "border-rose-500 focus:ring-rose-500/50" : "border-cyan-500/30 focus:border-emerald-400 focus:ring-emerald-500/50"}`,
                         }),
                         e.jsxs("p", {
                           className:
@@ -2104,14 +2104,14 @@ function oa() {
                             }),
                           ],
                         }),
-                        f.empNo &&
+                        k.empNo &&
                           e.jsxs("p", {
                             className:
                               "text-rose-400 text-xs mt-1 animate-pulse flex items-center gap-1",
                             children: [
                               e.jsx(ce, { className: "w-4 h-4" }),
                               " ",
-                              f.empNo,
+                              k.empNo,
                             ],
                           }),
                       ],
@@ -2132,7 +2132,7 @@ function oa() {
                           placeholder: "e.g., 20",
                           value: j.amount,
                           onChange: (i) =>
-                            A(
+                            T(
                               Q(W({}, j), {
                                 amount: Math.max(
                                   0,
@@ -2141,16 +2141,16 @@ function oa() {
                               }),
                             ),
                           min: "0",
-                          className: `w-full p-3 rounded-lg bg-gradient-to-r from-slate-700/60 to-violet-800/50 border-2 text-white placeholder-gray-500 focus:ring-2 transition-all duration-400 outline-none hover:border-lime-400/50 hover:shadow-md ${f.amount ? "border-rose-500 focus:ring-rose-500/50" : "border-lime-500/30 focus:border-lime-400 focus:ring-lime-500/50"}`,
+                          className: `w-full p-3 rounded-lg bg-gradient-to-r from-slate-700/60 to-violet-800/50 border-2 text-white placeholder-gray-500 focus:ring-2 transition-all duration-400 outline-none hover:border-lime-400/50 hover:shadow-md ${k.amount ? "border-rose-500 focus:ring-rose-500/50" : "border-lime-500/30 focus:border-lime-400 focus:ring-lime-500/50"}`,
                         }),
-                        f.amount &&
+                        k.amount &&
                           e.jsxs("p", {
                             className:
                               "text-rose-400 text-xs mt-1 animate-pulse flex items-center gap-1",
                             children: [
                               e.jsx(ce, { className: "w-4 h-4" }),
                               " ",
-                              f.amount,
+                              k.amount,
                             ],
                           }),
                       ],
@@ -2162,7 +2162,7 @@ function oa() {
                           className:
                             "block text-xs font-semibold text-cyan-300 mb-3 hover:text-emerald-200 transition-colors duration-400 flex items-center gap-1",
                           children: [
-                            e.jsx(be, { className: "w-4 h-4" }),
+                            e.jsx(pe, { className: "w-4 h-4" }),
                             " Device Type",
                           ],
                         }),
@@ -2177,7 +2177,7 @@ function oa() {
                                   name: "device",
                                   checked: j.isIphone,
                                   onChange: () =>
-                                    A(Q(W({}, j), { isIphone: !0 })),
+                                    T(Q(W({}, j), { isIphone: !0 })),
                                   className:
                                     "w-5 h-5 cursor-pointer text-violet-500",
                                 }),
@@ -2193,11 +2193,11 @@ function oa() {
                                   name: "device",
                                   checked: !j.isIphone,
                                   onChange: () =>
-                                    A(Q(W({}, j), { isIphone: !1 })),
+                                    T(Q(W({}, j), { isIphone: !1 })),
                                   className:
                                     "w-5 h-5 cursor-pointer text-emerald-500",
                                 }),
-                                e.jsx(be, { className: "w-5 h-5" }),
+                                e.jsx(pe, { className: "w-5 h-5" }),
                                 " Android",
                               ],
                             }),
@@ -2227,7 +2227,7 @@ function oa() {
                                   name: "status",
                                   checked: j.status,
                                   onChange: () =>
-                                    A(Q(W({}, j), { status: !0 })),
+                                    T(Q(W({}, j), { status: !0 })),
                                   className:
                                     "w-5 h-5 cursor-pointer text-emerald-500",
                                 }),
@@ -2243,7 +2243,7 @@ function oa() {
                                   name: "status",
                                   checked: !j.status,
                                   onChange: () =>
-                                    A(Q(W({}, j), { status: !1 })),
+                                    T(Q(W({}, j), { status: !1 })),
                                   className:
                                     "w-5 h-5 cursor-pointer text-rose-500",
                                 }),
@@ -2263,17 +2263,17 @@ function oa() {
                   children: [
                     e.jsxs("button", {
                       onClick: q,
-                      disabled: b,
+                      disabled: p,
                       className:
                         "flex-1 bg-white/20 hover:bg-white/40 disabled:bg-white/10 text-white font-bold px-6 py-3 rounded-xl transition-all duration-400 hover:scale-105 disabled:scale-100 flex items-center justify-center gap-2",
                       children: [
-                        b
+                        p
                           ? e.jsx(Ce, { className: "w-4 h-4 animate-spin" })
                           : null,
                         e.jsx("span", {
-                          children: b
+                          children: p
                             ? "Saving..."
-                            : g
+                            : u
                               ? "Update User"
                               : "Add User",
                         }),
@@ -2281,7 +2281,7 @@ function oa() {
                     }),
                     e.jsx("button", {
                       onClick: G,
-                      disabled: b,
+                      disabled: p,
                       className:
                         "flex-1 bg-rose-500/30 hover:bg-rose-500/50 disabled:bg-rose-500/20 text-white font-bold px-6 py-3 rounded-xl transition-all duration-400 hover:scale-105 disabled:scale-100",
                       children: "Cancel",
@@ -2292,13 +2292,13 @@ function oa() {
             }),
           ],
         }),
-      w &&
+      y &&
         e.jsxs(e.Fragment, {
           children: [
             e.jsx("div", {
               className:
                 "fixed inset-0 bg-black/70 backdrop-blur-md z-40 transition-all duration-500 animate-fade-in",
-              onClick: () => v(null),
+              onClick: () => f(null),
             }),
             e.jsxs("div", {
               className:
@@ -2329,18 +2329,18 @@ function oa() {
                     className: "flex gap-3",
                     children: [
                       e.jsx("button", {
-                        onClick: () => v(null),
-                        disabled: b,
+                        onClick: () => f(null),
+                        disabled: p,
                         className:
                           "flex-1 bg-white/10 hover:bg-white/30 disabled:bg-white/5 border border-white/20 text-white font-bold py-3 rounded-xl transition-all duration-400 hover:scale-105 disabled:scale-100",
                         children: "No, Keep It",
                       }),
                       e.jsx("button", {
-                        onClick: () => se(w),
-                        disabled: b,
+                        onClick: () => se(y),
+                        disabled: p,
                         className:
                           "flex-1 bg-rose-600 hover:bg-rose-700 disabled:bg-rose-600/60 text-white font-bold py-3 rounded-xl transition-all duration-400 hover:scale-105 disabled:scale-100 group",
-                        children: b ? "Deleting..." : "Yes, Delete",
+                        children: p ? "Deleting..." : "Yes, Delete",
                       }),
                     ],
                   }),
@@ -2349,7 +2349,7 @@ function oa() {
             }),
           ],
         }),
-      z &&
+      F &&
         e.jsxs(e.Fragment, {
           children: [
             e.jsx("div", {
@@ -2387,7 +2387,7 @@ function oa() {
                               type: "text",
                               placeholder:
                                 "🔍 Search by name, phone, ID, or email...",
-                              value: u,
+                              value: g,
                               onChange: (i) => M(i.target.value),
                               className:
                                 "w-full pl-12 pr-4 py-4 rounded-2xl bg-white/10 backdrop-blur-md border-2 border-white/20 text-white placeholder-gray-400 focus:border-lime-500/60 focus:ring-2 focus:ring-emerald-500/30 transition-all duration-400 outline-none group-hover:border-violet-400/40",
@@ -2423,14 +2423,14 @@ function oa() {
                         e.jsxs(
                           "label",
                           {
-                            className: `flex items-center gap-2 px-4 py-3 rounded-xl cursor-pointer transition-all duration-400 font-semibold text-sm border backdrop-blur-sm hover:scale-105 hover:shadow-lg ${S === i.value ? `bg-gradient-to-r ${i.color} border-white/30 text-white shadow-lg` : "bg-white/10 border-white/20 text-gray-300 hover:bg-white/20"}`,
+                            className: `flex items-center gap-2 px-4 py-3 rounded-xl cursor-pointer transition-all duration-400 font-semibold text-sm border backdrop-blur-sm hover:scale-105 hover:shadow-lg ${C === i.value ? `bg-gradient-to-r ${i.color} border-white/30 text-white shadow-lg` : "bg-white/10 border-white/20 text-gray-300 hover:bg-white/20"}`,
                             children: [
                               e.jsx("input", {
                                 type: "radio",
                                 name: "searchfilter",
                                 value: i.value,
-                                checked: S === i.value,
-                                onChange: (I) => T(I.target.value),
+                                checked: C === i.value,
+                                onChange: (I) => A(I.target.value),
                                 className: "w-4 h-4 cursor-pointer",
                               }),
                               e.jsxs("span", {
@@ -2469,12 +2469,12 @@ function oa() {
                                           className: "relative flex-shrink-0",
                                           children: [
                                             e.jsx("img", {
-                                              src: i.image || ue,
+                                              src: i.image || ge,
                                               alt: i.name,
                                               className:
                                                 "w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-2 border-cyan-500/50 group-hover:border-violet-500/60 transition-all duration-400 hover:rotate-6 hover:scale-110",
                                               onError: (I) => {
-                                                I.target.src = ue;
+                                                I.target.src = ge;
                                               },
                                             }),
                                             e.jsx("div", {
@@ -2543,7 +2543,7 @@ function oa() {
                                                 className:
                                                   "w-5 h-5 text-rose-300 transition-transform group-hover:rotate-12",
                                               })
-                                            : e.jsx(be, {
+                                            : e.jsx(pe, {
                                                 className:
                                                   "w-5 h-5 text-cyan-300 transition-transform group-hover:rotate-12",
                                               }),
@@ -2589,8 +2589,8 @@ function oa() {
             }),
           ],
         }),
-      F &&
-        e.jsx(sa, { message: F.message, type: F.type, onClose: () => o(null) }),
+      z &&
+        e.jsx(sa, { message: z.message, type: z.type, onClose: () => o(null) }),
     ],
   });
 }
@@ -2598,32 +2598,32 @@ function la() {
   const [t, r] = n.useState([]),
     [a, c] = n.useState(!0),
     [x, s] = n.useState(null),
-    [p, h] = n.useState("main"),
-    [d, y] = n.useState([]),
-    [E, g] = n.useState([]),
-    [k, b] = n.useState(0),
-    [C, j] = n.useState(!1),
-    [A, f] = n.useState(!1),
-    [$, z] = n.useState(null),
-    [N, u] = n.useState([]),
-    [M, S] = n.useState({ success: [], failed: [] }),
-    [T, w] = n.useState(!1),
-    [v, F] = n.useState(""),
+    [b, h] = n.useState("main"),
+    [d, v] = n.useState([]),
+    [E, u] = n.useState([]),
+    [S, p] = n.useState(0),
+    [D, j] = n.useState(!1),
+    [T, k] = n.useState(!1),
+    [w, F] = n.useState(null),
+    [N, g] = n.useState([]),
+    [M, C] = n.useState({ success: [], failed: [] }),
+    [A, y] = n.useState(!1),
+    [f, z] = n.useState(""),
     [o] = n.useState(!0);
   n.useEffect(() => {
     (async () => {
       try {
         c(!0), s(null);
         const {
-          error: D,
-          data: U = [],
+          error: $,
+          data: _ = [],
           message: L,
         } = await re.post("/foodease/get_users");
-        if (D) return s(L);
-        r(U);
-      } catch (D) {
-        console.error("Failed to fetch users:", D),
-          s(D.message),
+        if ($) return s(L);
+        r(_);
+      } catch ($) {
+        console.error("Failed to fetch users:", $),
+          s($.message),
           G("Failed to load users", "error");
       } finally {
         c(!1);
@@ -2633,31 +2633,31 @@ function la() {
   const R = n.useMemo(
       () =>
         t.filter((l) => {
-          const D =
-            l.name.toLowerCase().includes(v.toLowerCase()) ||
-            l.number.includes(v) ||
-            l.empNo.includes(v) ||
-            l.email.includes(v);
+          const $ =
+            l.name.toLowerCase().includes(f.toLowerCase()) ||
+            l.number.includes(f) ||
+            l.empNo.includes(f) ||
+            l.email.includes(f);
           return (
             (["scheduled", "none"].includes(l.status) || N.includes(l.empNo)) &&
-            D
+            $
           );
         }),
-      [t, N, v],
+      [t, N, f],
     ),
     O = n.useMemo(
       () =>
         t.filter(
           (l) =>
-            l.name.toLowerCase().includes(v.toLowerCase()) ||
-            l.number.includes(v) ||
-            l.empNo.includes(v) ||
-            l.email.includes(v),
+            l.name.toLowerCase().includes(f.toLowerCase()) ||
+            l.number.includes(f) ||
+            l.empNo.includes(f) ||
+            l.email.includes(f),
         ),
-      [t, v],
+      [t, f],
     ),
     J = (l) => {
-      const D = {
+      const $ = {
         available: {
           bg: o
             ? "bg-gradient-to-br from-green-900/50 to-emerald-900/50"
@@ -2739,56 +2739,56 @@ function la() {
           badge: o ? "bg-red-500/20" : "bg-red-500/10",
         },
       };
-      return D[String(l).toLowerCase()] || D.available;
+      return $[String(l).toLowerCase()] || $.available;
     },
     ee = (l) => {
-      const D = t.find((L) => L.empNo === l),
-        U = N.includes(l);
-      (!D.status && !U) ||
-        y((L) => (L.includes(l) ? L.filter((B) => B !== l) : [...L, l]));
+      const $ = t.find((L) => L.empNo === l),
+        _ = N.includes(l);
+      (!$.status && !_) ||
+        v((L) => (L.includes(l) ? L.filter((B) => B !== l) : [...L, l]));
     },
-    se = (l, D) => {
-      D.stopPropagation(),
-        u((U) =>
-          U.includes(l)
-            ? (y((L) => L.filter((B) => B !== l)), U.filter((L) => L !== l))
-            : [...U, l],
+    se = (l, $) => {
+      $.stopPropagation(),
+        g((_) =>
+          _.includes(l)
+            ? (v((L) => L.filter((B) => B !== l)), _.filter((L) => L !== l))
+            : [..._, l],
         );
     },
     le = () => {
-      const l = R.map((D) => D.empNo);
-      y(l), G("All available users selected!", "success");
+      const l = R.map(($) => $.empNo);
+      v(l), G("All available users selected!", "success");
     },
     he = () => {
-      y([]), G("Selection cleared", "info");
+      v([]), G("Selection cleared", "info");
     },
-    q = (l, D = "info") => {
-      const U = new Date().toLocaleTimeString();
-      g((L) => [
+    q = (l, $ = "info") => {
+      const _ = new Date().toLocaleTimeString();
+      u((L) => [
         ...L,
-        { message: l, type: D, timestamp: U, id: Date.now() + Math.random() },
+        { message: l, type: $, timestamp: _, id: Date.now() + Math.random() },
       ]);
     },
-    G = (l, D = "success") => {
-      z({ message: l, type: D }), setTimeout(() => z(null), 3e3);
+    G = (l, $ = "success") => {
+      F({ message: l, type: $ }), setTimeout(() => F(null), 3e3);
     },
-    pe = () => {
+    be = () => {
       if (d.length === 0) {
         G("Please select at least one user", "error");
         return;
       }
       h("booking"),
-        g([]),
-        b(0),
-        S({ success: [], failed: [] }),
-        w(!1),
-        f(!0),
+        u([]),
+        p(0),
+        C({ success: [], failed: [] }),
+        y(!1),
+        k(!0),
         q(`🚀 Starting automated booking for ${d.length} user(s)`, "system");
     },
     oe = (l) => {
       if (l >= d.length) {
-        f(!1),
-          w(!0),
+        k(!1),
+          y(!0),
           q("✨ All bookings completed!", "system"),
           q(
             `✓ Successful: ${M.success.length} | ✗ Failed: ${M.failed.length}`,
@@ -2796,46 +2796,46 @@ function la() {
           );
         return;
       }
-      j(!0), b(l);
-      const D = d[l],
-        U = t.find((L) => L.empNo === D);
-      q(`📋 Processing: ${U.name} (${U.empNo})`, "info"),
+      j(!0), p(l);
+      const $ = d[l],
+        _ = t.find((L) => L.empNo === $);
+      q(`📋 Processing: ${_.name} (${_.empNo})`, "info"),
         setTimeout(() => {
           q("🔍 Verifying user details...", "info");
         }, 300),
         setTimeout(() => {
-          q(`📱 Phone: ${U.number}`, "info");
+          q(`📱 Phone: ${_.number}`, "info");
         }, 600),
         setTimeout(() => {
           Math.random() > 0.1
-            ? (q(`✅ Booking confirmed for ${U.name}`, "success"),
-              S((B) => Q(W({}, B), { success: [...B.success, U] })))
-            : (q(`❌ Booking failed for ${U.name} - Network error`, "error"),
-              S((B) => Q(W({}, B), { failed: [...B.failed, U] })));
+            ? (q(`✅ Booking confirmed for ${_.name}`, "success"),
+              C((B) => Q(W({}, B), { success: [...B.success, _] })))
+            : (q(`❌ Booking failed for ${_.name} - Network error`, "error"),
+              C((B) => Q(W({}, B), { failed: [...B.failed, _] })));
         }, 900),
         setTimeout(() => {
           q("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━", "system"), j(!1);
         }, 1200);
     };
   n.useEffect(() => {
-    if (A && !C && k < d.length) {
+    if (T && !D && S < d.length) {
       const l = setTimeout(() => {
-        oe(k);
+        oe(S);
       }, 500);
       return () => clearTimeout(l);
-    } else A && !C && k >= d.length && oe(k);
-  }, [A, C, k, d.length, oe]);
+    } else T && !D && S >= d.length && oe(S);
+  }, [T, D, S, d.length, oe]);
   const i = () => {
-      const l = M.failed.map((D) => D.empNo);
-      y(l), h("main"), G(`${l.length} failed bookings ready for retry`, "info");
+      const l = M.failed.map(($) => $.empNo);
+      v(l), h("main"), G(`${l.length} failed bookings ready for retry`, "info");
     },
     I = () => {
-      h("main"), f(!1), b(0);
+      h("main"), k(!1), p(0);
     };
   return e.jsxs("div", {
     className: `min-h-screen transition-colors duration-300 ${o ? "bg-gradient-to-br from-gray-950 via-purple-950 to-gray-900" : "bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50"}`,
     children: [
-      p === "main" &&
+      b === "main" &&
         e.jsxs(e.Fragment, {
           children: [
             e.jsx(Be, {}),
@@ -2862,8 +2862,8 @@ function la() {
                         type: "text",
                         placeholder:
                           "🔎 Search by name, phone, Prudent ID, or User ID...",
-                        value: v,
-                        onChange: (l) => F(l.target.value),
+                        value: f,
+                        onChange: (l) => z(l.target.value),
                         className: `w-full pl-12 pr-4 py-4 rounded-2xl border-2 transition-all ${o ? "bg-gray-800 border-purple-500 text-white placeholder-gray-400 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/30" : "bg-white border-purple-300 text-gray-900 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/30"} font-semibold`,
                       }),
                     ],
@@ -2910,7 +2910,7 @@ function la() {
                         e.jsxs("div", {
                           className: `text-sm font-bold mb-2 flex items-center gap-2 ${o ? "text-pink-300" : "opacity-90"}`,
                           children: [
-                            e.jsx(Ut, { className: "w-4 h-4" }),
+                            e.jsx(_t, { className: "w-4 h-4" }),
                             "Total Users",
                           ],
                         }),
@@ -2938,11 +2938,11 @@ function la() {
                       children: "🗑️ Clear",
                     }),
                     e.jsxs("button", {
-                      onClick: pe,
+                      onClick: be,
                       disabled: d.length === 0,
                       className: `flex-1 px-6 py-4 rounded-xl font-bold text-lg shadow-xl transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${o ? "bg-gradient-to-r from-pink-600 to-red-500 text-white hover:from-pink-700 hover:to-red-600" : "bg-gradient-to-r from-pink-500 to-red-500 text-white hover:from-pink-600 hover:to-red-600"}`,
                       children: [
-                        e.jsx(_t, { className: "w-5 h-5" }),
+                        e.jsx(Ut, { className: "w-5 h-5" }),
                         "Start Booking (",
                         d.length,
                         ")",
@@ -2954,15 +2954,15 @@ function la() {
                   className:
                     "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5",
                   children: O.map((l) => {
-                    const D = J(l.status),
-                      U = d.includes(l.empNo),
+                    const $ = J(l.status),
+                      _ = d.includes(l.empNo),
                       L = N.includes(l.empNo),
                       B = ["none", "scheduled"].includes(l.status) || L,
                       m = !["none", "scheduled"].includes(l.status);
                     return e.jsxs(
                       "div",
                       {
-                        className: `rounded-2xl border-2 p-5 cursor-pointer transition-all transform hover:scale-105 shadow-lg backdrop-blur-sm ${U ? (o ? "bg-gradient-to-br from-pink-900/70 to-purple-900/70 border-pink-500 shadow-pink-500/50" : "bg-gradient-to-br from-pink-100 to-purple-100 border-pink-500") : o ? "bg-gray-800/50 border-gray-700 hover:border-purple-500" : "bg-white border-gray-300 hover:border-purple-400"}`,
+                        className: `rounded-2xl border-2 p-5 cursor-pointer transition-all transform hover:scale-105 shadow-lg backdrop-blur-sm ${_ ? (o ? "bg-gradient-to-br from-pink-900/70 to-purple-900/70 border-pink-500 shadow-pink-500/50" : "bg-gradient-to-br from-pink-100 to-purple-100 border-pink-500") : o ? "bg-gray-800/50 border-gray-700 hover:border-purple-500" : "bg-white border-gray-300 hover:border-purple-400"}`,
                         onClick: () => ee(B ? l.empNo : null),
                         role: "button",
                         tabIndex: B ? 0 : -1,
@@ -2973,7 +2973,7 @@ function la() {
                             children: [
                               e.jsx("input", {
                                 type: "checkbox",
-                                checked: U,
+                                checked: _,
                                 onChange: () => ee(l.empNo),
                                 disabled: !B,
                                 className:
@@ -3016,13 +3016,13 @@ function la() {
                               "flex items-center justify-between gap-2 flex-wrap",
                             children: [
                               e.jsxs("div", {
-                                className: `inline-flex items-center px-3 py-2 rounded-xl text-xs font-bold border-2 ${D.bg} ${D.text} ${D.border}`,
+                                className: `inline-flex items-center px-3 py-2 rounded-xl text-xs font-bold border-2 ${$.bg} ${$.text} ${$.border}`,
                                 children: [
                                   e.jsx("span", {
                                     className: "mr-2 text-lg",
-                                    children: D.icon,
+                                    children: $.icon,
                                   }),
-                                  L ? "Enabled" : D.label,
+                                  L ? "Enabled" : $.label,
                                 ],
                               }),
                               m &&
@@ -3057,13 +3057,13 @@ function la() {
             }),
           ],
         }),
-      p === "booking" &&
+      b === "booking" &&
         e.jsxs("div", {
           className: "max-w-4xl mx-auto p-4 sm:p-8",
           children: [
             e.jsxs("button", {
               onClick: I,
-              disabled: C && !T,
+              disabled: D && !A,
               className: `flex items-center gap-2 mb-8 px-6 py-3 rounded-xl font-bold transition-all ${o ? "bg-gray-800 border-2 border-gray-700 text-purple-300 hover:border-purple-500 disabled:opacity-50" : "bg-white border-2 border-gray-300 text-gray-700 hover:border-blue-500 disabled:opacity-50"}`,
               children: [e.jsx(Oe, { className: "w-5 h-5" }), "Back"],
             }),
@@ -3093,7 +3093,7 @@ function la() {
                 }),
               ],
             }),
-            !T &&
+            !A &&
               e.jsxs("div", {
                 className: `rounded-2xl p-8 mb-8 shadow-xl border-2 ${o ? "bg-gray-800 border-gray-700" : "bg-white border-gray-300"}`,
                 children: [
@@ -3104,7 +3104,7 @@ function la() {
                         className: `text-lg font-bold ${o ? "text-white" : "text-gray-800"}`,
                         children: [
                           "⚙️ Processing ",
-                          k + 1,
+                          S + 1,
                           " of",
                           " ",
                           d.length,
@@ -3112,7 +3112,7 @@ function la() {
                       }),
                       e.jsxs("span", {
                         className: `text-2xl font-black ${o ? "text-pink-400" : "text-pink-600"}`,
-                        children: [Math.round(((k + 1) / d.length) * 100), "%"],
+                        children: [Math.round(((S + 1) / d.length) * 100), "%"],
                       }),
                     ],
                   }),
@@ -3121,7 +3121,7 @@ function la() {
                     children: e.jsx("div", {
                       className:
                         "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 h-4 rounded-full transition-all duration-500 shadow-lg",
-                      style: { width: `${((k + 1) / d.length) * 100}%` },
+                      style: { width: `${((S + 1) / d.length) * 100}%` },
                     }),
                   }),
                 ],
@@ -3130,7 +3130,7 @@ function la() {
               className: `rounded-3xl shadow-2xl border-2 overflow-hidden ${o ? "bg-gray-800 border-gray-700" : "bg-white border-gray-300"}`,
               children: e.jsx("div", {
                 className: "p-8",
-                children: T
+                children: A
                   ? e.jsxs("div", {
                       className: "space-y-8",
                       children: [
@@ -3239,9 +3239,9 @@ function la() {
                     })
                   : e.jsxs(e.Fragment, {
                       children: [
-                        k < d.length &&
+                        S < d.length &&
                           (() => {
-                            const l = t.find((D) => D.empNo === d[k]);
+                            const l = t.find(($) => $.empNo === d[S]);
                             return e.jsxs("div", {
                               className: `rounded-2xl p-6 mb-8 border-2 ${o ? "bg-gradient-to-r from-blue-900/50 to-pink-900/50 border-blue-600" : "bg-gradient-to-r from-blue-100 to-pink-100 border-purple-300"}`,
                               children: [
@@ -3346,17 +3346,17 @@ function la() {
             }),
           ],
         }),
-      $ &&
+      w &&
         e.jsx("div", {
           className: "fixed top-6 right-6 z-50 animate-bounce",
           children: e.jsxs("div", {
-            className: `px-6 py-4 rounded-2xl shadow-2xl text-white font-bold flex items-center gap-3 border-2 ${$.type === "success" ? (o ? "bg-gradient-to-r from-green-600 to-emerald-600 border-green-500" : "bg-gradient-to-r from-green-500 to-emerald-600 border-green-400") : $.type === "error" ? (o ? "bg-gradient-to-r from-red-600 to-rose-600 border-red-500" : "bg-gradient-to-r from-red-500 to-rose-600 border-red-400") : o ? "bg-gradient-to-r from-blue-600 to-cyan-600 border-blue-500" : "bg-gradient-to-r from-blue-500 to-cyan-600 border-blue-400"}`,
+            className: `px-6 py-4 rounded-2xl shadow-2xl text-white font-bold flex items-center gap-3 border-2 ${w.type === "success" ? (o ? "bg-gradient-to-r from-green-600 to-emerald-600 border-green-500" : "bg-gradient-to-r from-green-500 to-emerald-600 border-green-400") : w.type === "error" ? (o ? "bg-gradient-to-r from-red-600 to-rose-600 border-red-500" : "bg-gradient-to-r from-red-500 to-rose-600 border-red-400") : o ? "bg-gradient-to-r from-blue-600 to-cyan-600 border-blue-500" : "bg-gradient-to-r from-blue-500 to-cyan-600 border-blue-400"}`,
             children: [
-              $.type === "success" &&
+              w.type === "success" &&
                 e.jsx(We, { className: "w-5 h-5 flex-shrink-0" }),
-              $.type === "error" &&
+              w.type === "error" &&
                 e.jsx(Ge, { className: "w-5 h-5 flex-shrink-0" }),
-              $.message,
+              w.message,
             ],
           }),
         }),
@@ -3528,43 +3528,43 @@ function ca() {
   const { user: t } = xe(),
     [r, a] = n.useState(new Date()),
     [c, x] = n.useState([]),
-    [s, p] = n.useState({
+    [s, b] = n.useState({
       bookings: 0,
       totalAmount: 0,
       cancelled: 0,
       amount: 0,
     }),
     [h, d] = n.useState(null),
-    [y, E] = n.useState(!1),
-    [g, k] = n.useState(!1),
-    [b, C] = n.useState(t == null ? void 0 : t.empNo);
+    [v, E] = n.useState(!1),
+    [u, S] = n.useState(!1),
+    [p, D] = n.useState(t == null ? void 0 : t.empNo);
   n.useEffect(() => {
-    C((t == null ? void 0 : t.empNo) || b);
+    D((t == null ? void 0 : t.empNo) || p);
   }, [t]);
-  const j = async (S, T) => {
-    k(!0);
+  const j = async (C, A) => {
+    S(!0);
     try {
       var {
-        error: w,
-        message: v,
-        data: F,
-      } = await re.post(`/foodease/calendar/month/${b}`, {
-        year: S,
-        month: T + 1 > 9 ? T + 1 : "0" + (T + 1),
+        error: y,
+        message: f,
+        data: z,
+      } = await re.post(`/foodease/calendar/month/${p}`, {
+        year: C,
+        month: A + 1 > 9 ? A + 1 : "0" + (A + 1),
       });
-      if (w) {
-        console.log(v);
+      if (y) {
+        console.log(f);
         return;
-      } else if (F) {
+      } else if (z) {
         const {
           calendar: o,
           totalAmount: R,
           totalBookings: O,
           totalCanceled: J,
           amountPerMeal: ee,
-        } = F;
+        } = z;
         x(o),
-          p((se) =>
+          b((se) =>
             Q(W({}, se), {
               totalAmount: R,
               bookings: O,
@@ -3576,29 +3576,29 @@ function ca() {
     } catch (o) {
       console.log("API call failed:", o);
     } finally {
-      k(!1);
+      S(!1);
     }
   };
   n.useEffect(() => {
-    var S = r.getMonth(),
-      T = r.getFullYear();
-    j(T, S);
-  }, [r, b]);
-  const A = (S) => {
-      if (!S || g) return;
-      const T = r.getFullYear(),
-        w = r.getMonth(),
-        v = `${T}-${String(w + 1).padStart(2, "0")}-${String(S).padStart(2, "0")}`;
-      d(v), E(!0);
+    var C = r.getMonth(),
+      A = r.getFullYear();
+    j(A, C);
+  }, [r, p]);
+  const T = (C) => {
+      if (!C || u) return;
+      const A = r.getFullYear(),
+        y = r.getMonth(),
+        f = `${A}-${String(y + 1).padStart(2, "0")}-${String(C).padStart(2, "0")}`;
+      d(f), E(!0);
     },
-    f = async (S, T = !0) => {
+    k = async (C, A = !0) => {
       try {
-        var [w, v, F] = S.split("-").map(Number);
-        await re.post(`/foodease/schedule/${b}`, {
-          year: w,
-          month: v,
-          day: F,
-          book: T,
+        var [y, f, z] = C.split("-").map(Number);
+        await re.post(`/foodease/schedule/${p}`, {
+          year: y,
+          month: f,
+          day: z,
+          book: A,
         }),
           N(),
           E(!1);
@@ -3606,32 +3606,32 @@ function ca() {
         console.log("Booking failed:", o);
       }
     },
-    $ = async (S) => {
+    w = async (C) => {
       try {
-        var [T, w, v] = S.split("-").map(Number);
-        await re.put(`/foodease/schedule/${b}`, { year: T, month: w, day: v }),
+        var [A, y, f] = C.split("-").map(Number);
+        await re.put(`/foodease/schedule/${p}`, { year: A, month: y, day: f }),
           N(),
           E(!1);
-      } catch (F) {
-        console.log("Cancel failed:", F);
+      } catch (z) {
+        console.log("Cancel failed:", z);
       }
     },
-    z = (S) => {
-      const T = new Date(r);
-      T.setMonth(T.getMonth() + S), a(T);
+    F = (C) => {
+      const A = new Date(r);
+      A.setMonth(A.getMonth() + C), a(A);
     },
     N = () => {
-      const S = r.getFullYear(),
-        T = r.getMonth();
-      j(S, T);
+      const C = r.getFullYear(),
+        A = r.getMonth();
+      j(C, A);
     },
-    u = () => {
+    g = () => {
       window.history.back();
     },
-    M = (S) => {
-      C(S.target.value), N();
+    M = (C) => {
+      D(C.target.value), N();
     };
-  return g
+  return u
     ? e.jsxs("div", {
         className:
           "h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 overflow-y-auto flex flex-col",
@@ -3714,8 +3714,8 @@ function ca() {
                     user: t,
                     events: c,
                     onRefresh: N,
-                    handleBack: u,
-                    selectedEmpNo: b,
+                    handleBack: g,
+                    selectedEmpNo: p,
                     onEmpChange: M,
                   }),
                 }),
@@ -3724,8 +3724,8 @@ function ca() {
                   children: e.jsx(ha, {
                     currentDate: r,
                     events: c,
-                    onMonthChange: z,
-                    onDateClick: A,
+                    onMonthChange: F,
+                    onDateClick: T,
                   }),
                 }),
                 e.jsx("div", {
@@ -3736,7 +3736,7 @@ function ca() {
                     user: t,
                     events: c,
                     onRefresh: N,
-                    handleBack: u,
+                    handleBack: g,
                   }),
                 }),
               ],
@@ -3747,14 +3747,14 @@ function ca() {
               "text-center text-xs text-gray-400 p-2 bg-gradient-to-r from-slate-950 via-purple-950 to-pink-950 border-t border-gray-800 shrink-0",
             children: "© 2025 FoodEase. All rights reserved.",
           }),
-          y &&
+          v &&
             h &&
-            e.jsx(pa, {
+            e.jsx(ba, {
               date: h,
               events: c,
               onClose: () => E(!1),
-              handleBook: f,
-              onChangeBooking: $,
+              handleBook: k,
+              onChangeBooking: w,
             }),
           e.jsx("style", {
             children: `
@@ -3829,25 +3829,25 @@ function nt({ stats: t, pc: r = !1 }) {
         e.jsxs("div", {
           className: "grid grid-cols-1 gap-3 sm:gap-4",
           children: [
-            e.jsx(we, {
+            e.jsx(ye, {
               icon: "✅",
               label: "Total Bookings",
               value: (t == null ? void 0 : t.bookings) || 0,
               color: "green",
             }),
-            e.jsx(we, {
+            e.jsx(ye, {
               icon: "💰",
               label: "Total Spent",
               value: `₹${(t == null ? void 0 : t.totalAmount) || 0}`,
               color: "blue",
             }),
-            e.jsx(we, {
+            e.jsx(ye, {
               icon: "❌",
               label: "Cancelled",
               value: (t == null ? void 0 : t.cancelled) || 0,
               color: "red",
             }),
-            e.jsx(we, {
+            e.jsx(ye, {
               icon: "💲",
               label: "Per Day",
               value: `₹${(t == null ? void 0 : t.amount) || 0}`,
@@ -3889,7 +3889,7 @@ function ma({
   selectedEmpNo: x,
   onEmpChange: s,
 }) {
-  var p;
+  var b;
   return e.jsxs("div", {
     className:
       "bg-gradient-to-br from-purple-900/80 via-pink-900/60 to-indigo-900/80 border border-purple-400/30 rounded-2xl p-2 sm:p-4 backdrop-blur-xl animate-slide-up shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 hover:border-purple-400/50 flex flex-col",
@@ -3918,9 +3918,9 @@ function ma({
                 "w-full p-2 bg-gradient-to-r from-gray-800 to-gray-700 border border-purple-400/30 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500",
               style: { backgroundColor: "rgb(31 41 55)", color: "white" },
               children:
-                (p = r == null ? void 0 : r.users) == null
+                (b = r == null ? void 0 : r.users) == null
                   ? void 0
-                  : p.map((h) =>
+                  : b.map((h) =>
                       e.jsxs(
                         "option",
                         {
@@ -3946,7 +3946,7 @@ function ma({
     ],
   });
 }
-function we({ icon: t, label: r, value: a, color: c }) {
+function ye({ icon: t, label: r, value: a, color: c }) {
   const x = {
     green:
       "from-green-700/80 via-emerald-600/60 to-teal-700/60 border-green-400/50 shadow-lg shadow-green-500/20",
@@ -3984,7 +3984,7 @@ function we({ icon: t, label: r, value: a, color: c }) {
     }),
   });
 }
-function ge({ icon: t, label: r, color: a }) {
+function ue({ icon: t, label: r, color: a }) {
   const c = {
     green:
       "from-green-600/50 to-emerald-500/30 border-green-400/60 shadow-lg shadow-green-500/20",
@@ -4033,23 +4033,23 @@ function xa({ onRefresh: t, stats: r, handleBack: a }) {
             e.jsxs("div", {
               className: "space-y-3 sm:space-y-2",
               children: [
-                e.jsx(ge, {
+                e.jsx(ue, {
                   icon: "✅",
                   label: "Booked | Scheduled",
                   color: "green",
                 }),
-                e.jsx(ge, {
+                e.jsx(ue, {
                   icon: "❌",
                   label: "Cancelled | Cancel Booking",
                   color: "red",
                 }),
-                e.jsx(ge, { icon: "🏠", label: "WFH", color: "blue" }),
-                e.jsx(ge, {
+                e.jsx(ue, { icon: "🏠", label: "WFH", color: "blue" }),
+                e.jsx(ue, {
                   icon: "🎊",
                   label: "Weekend | Holiday",
                   color: "orange",
                 }),
-                e.jsx(ge, {
+                e.jsx(ue, {
                   icon: "🎉",
                   label: "Leave | Company Leave",
                   color: "purple",
@@ -4065,7 +4065,7 @@ function xa({ onRefresh: t, stats: r, handleBack: a }) {
 function ha({ currentDate: t, events: r, onMonthChange: a, onDateClick: c }) {
   const x = t.getFullYear(),
     s = t.getMonth(),
-    p = [
+    b = [
       "January",
       "February",
       "March",
@@ -4081,13 +4081,13 @@ function ha({ currentDate: t, events: r, onMonthChange: a, onDateClick: c }) {
     ],
     h = new Date(x, s + 1, 0).getDate(),
     d = new Date(x, s, 1).getDay(),
-    y = [];
-  for (let g = 0; g < d; g++) y.push(null);
-  for (let g = 1; g <= h; g++) y.push(g);
-  const E = (g) => {
-    if (!g) return null;
-    const k = `${x}-${String(s + 1).padStart(2, "0")}-${String(g).padStart(2, "0")}`;
-    return r == null ? void 0 : r.find((b) => b.date === k);
+    v = [];
+  for (let u = 0; u < d; u++) v.push(null);
+  for (let u = 1; u <= h; u++) v.push(u);
+  const E = (u) => {
+    if (!u) return null;
+    const S = `${x}-${String(s + 1).padStart(2, "0")}-${String(u).padStart(2, "0")}`;
+    return r == null ? void 0 : r.find((p) => p.date === S);
   };
   return e.jsxs("div", {
     className:
@@ -4108,7 +4108,7 @@ function ha({ currentDate: t, events: r, onMonthChange: a, onDateClick: c }) {
           e.jsxs("h2", {
             className:
               "text-xl sm:text-2xl sm:text-3xl font-black text-center flex-1 bg-gradient-to-r from-cyan-300 via-purple-300 to-pink-300 bg-clip-text text-transparent",
-            children: [p[s], " ", x],
+            children: [b[s], " ", x],
           }),
           e.jsx("button", {
             onClick: () => a(1),
@@ -4123,39 +4123,58 @@ function ha({ currentDate: t, events: r, onMonthChange: a, onDateClick: c }) {
       e.jsx("div", {
         className: "grid grid-cols-7 gap-1 sm:gap-2 mb-1 sm:mb-2 flex-shrink-0",
         children: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
-          (g, k) =>
+          (u, S) =>
             e.jsx(
               "div",
               {
-                className: `text-center text-xs font-bold py-2 sm:py-3 uppercase tracking-wider ${k === 0 || k === 6 ? "bg-gradient-to-r from-orange-400/30 to-pink-400/30 text-orange-200 rounded-lg" : "text-cyan-300"}`,
-                children: g,
+                className: `text-center text-xs font-bold py-2 sm:py-3 uppercase tracking-wider ${S === 0 || S === 6 ? "bg-gradient-to-r from-orange-400/30 to-pink-400/30 text-orange-200 rounded-lg" : "text-cyan-300"}`,
+                children: u,
               },
-              g,
+              u,
             ),
         ),
       }),
       e.jsx("div", {
         className: "grid grid-cols-7 gap-1 sm:gap-2 flex-1",
-        children: y.map((g, k) => {
-          if (!g) return e.jsx("div", { className: "aspect-square" }, k);
-          var b = E(g);
-          let C =
+        children: v.map((u, S) => {
+          if (!u) return e.jsx("div", { className: "aspect-square" }, S);
+          var p = E(u);
+          let D =
               "bg-gradient-to-br from-slate-700/40 to-slate-600/20 border-slate-500/30 hover:from-slate-600/60 hover:to-slate-500/40",
             j = null;
+          var T = {
+            holiday:
+              "bg-gradient-to-br from-orange-600/60 to-amber-600/50 border-orange-400/60 hover:from-orange-500/80 hover:to-amber-500/60 shadow-lg shadow-orange-500/20",
+            weekend:
+              "bg-gradient-to-br from-orange-600/60 to-amber-600/50 border-orange-400/60 hover:from-orange-500/80 hover:to-amber-500/60 shadow-lg shadow-orange-500/20",
+            scheduled:
+              "bg-gradient-to-br from-green-600/70 to-emerald-600/60 border-green-400/70 shadow-lg shadow-green-500/40 hover:shadow-2xl hover:from-green-500/90 hover:to-emerald-500/80",
+            schedule_canceled:
+              "bg-gradient-to-br from-red-600/70 to-pink-600/60 border-red-400/70 shadow-lg shadow-red-500/30 hover:shadow-2xl hover:from-red-500/90 hover:to-pink-500/80",
+            canceled:
+              "bg-gradient-to-br from-red-600/70 to-pink-600/60 border-red-400/70 shadow-lg shadow-red-500/30 hover:shadow-2xl hover:from-red-500/90 hover:to-pink-500/80",
+            wfh: "bg-gradient-to-br from-blue-600/70 to-cyan-600/60 border-blue-400/70 shadow-lg shadow-blue-500/40 hover:shadow-2xl",
+            today:
+              "bg-gradient-to-br from-yellow-500/60 to-orange-500/50 border-yellow-400/70 shadow-lg shadow-yellow-500/40 hover:shadow-2xl",
+            none: "bg-gradient-to-br from-slate-700/40 to-slate-600/20 border-slate-500/30 hover:from-slate-600/60 hover:to-slate-500/40",
+            booked:
+              "bg-gradient-to-br from-green-600/70 to-emerald-600/60 border-green-400/70 shadow-lg shadow-green-500/40 hover:shadow-2xl hover:from-green-500/90 hover:to-emerald-500/80",
+            leave:
+              "bg-gradient-to-br from-purple-600/70 to-violet-600/60 border-purple-400/70 shadow-lg shadow-purple-500/30 hover:shadow-2xl hover:from-purple-500/90 hover:to-violet-500/80",
+          };
           return (
-            b != null && b.color && (C = b.color),
-            b != null && b.icon && (j = b.icon),
-            console.log(C, j),
+            p != null && p.color && (D = T[p.event] || D),
+            p != null && p.icon && (j = p.icon),
             e.jsxs(
               "button",
               {
-                onClick: () => c(g),
-                title: (b == null ? void 0 : b.tooltip) || "",
-                className: `aspect-square ${C} border rounded-lg flex flex-col items-center justify-center cursor-pointer hover:scale-110 transition-all duration-300 hover:shadow-2xl transform active:scale-95 font-bold text-white`,
+                onClick: () => c(u),
+                title: (p == null ? void 0 : p.tooltip) || "",
+                className: `aspect-square ${D} border rounded-lg flex flex-col items-center justify-center cursor-pointer hover:scale-110 transition-all duration-300 hover:shadow-2xl transform active:scale-95 font-bold text-white`,
                 children: [
                   e.jsx("span", {
                     className: "text-xs sm:text-sm leading-tight",
-                    children: g,
+                    children: u,
                   }),
                   j &&
                     e.jsx("span", {
@@ -4164,7 +4183,7 @@ function ha({ currentDate: t, events: r, onMonthChange: a, onDateClick: c }) {
                     }),
                 ],
               },
-              k,
+              S,
             )
           );
         }),
@@ -4172,22 +4191,42 @@ function ha({ currentDate: t, events: r, onMonthChange: a, onDateClick: c }) {
     ],
   });
 }
-function pa({
+function ba({
   date: t,
   events: r = [],
   onClose: a,
   handleBook: c,
   onChangeBooking: x,
 }) {
-  var b, C, j, A;
-  const s = r.find((f) => f.date == t) || {};
-  var p = new Date(),
-    [h, d, y] = t.split("-").map(Number),
+  var D, j, T, k;
+  const s = r.find((w) => w.date == t) || {};
+  var b = new Date(),
+    [h, d, v] = t.split("-").map(Number),
     E =
-      new Date(h, d - 1, y) >
-      new Date(p.getFullYear(), p.getMonth(), p.getDate());
-  const g = s.event === "none" && E,
-    k = (s.event === "scheduled" || s.event === "schedule_canceled") && E;
+      new Date(h, d - 1, v) >
+      new Date(b.getFullYear(), b.getMonth(), b.getDate());
+  const u = s.event === "none" && E,
+    S = (s.event === "scheduled" || s.event === "schedule_canceled") && E;
+  var p = {
+    holiday:
+      "bg-gradient-to-br from-orange-600/60 to-amber-600/50 border-orange-400/60 hover:from-orange-500/80 hover:to-amber-500/60 shadow-lg shadow-orange-500/20",
+    weekend:
+      "bg-gradient-to-br from-orange-600/60 to-amber-600/50 border-orange-400/60 hover:from-orange-500/80 hover:to-amber-500/60 shadow-lg shadow-orange-500/20",
+    scheduled:
+      "bg-gradient-to-br from-green-600/70 to-emerald-600/60 border-green-400/70 shadow-lg shadow-green-500/40 hover:shadow-2xl hover:from-green-500/90 hover:to-emerald-500/80",
+    schedule_canceled:
+      "bg-gradient-to-br from-red-600/70 to-pink-600/60 border-red-400/70 shadow-lg shadow-red-500/30 hover:shadow-2xl hover:from-red-500/90 hover:to-pink-500/80",
+    canceled:
+      "bg-gradient-to-br from-red-600/70 to-pink-600/60 border-red-400/70 shadow-lg shadow-red-500/30 hover:shadow-2xl hover:from-red-500/90 hover:to-pink-500/80",
+    wfh: "bg-gradient-to-br from-blue-600/70 to-cyan-600/60 border-blue-400/70 shadow-lg shadow-blue-500/40 hover:shadow-2xl",
+    today:
+      "bg-gradient-to-br from-yellow-500/60 to-orange-500/50 border-yellow-400/70 shadow-lg shadow-yellow-500/40 hover:shadow-2xl",
+    none: "bg-gradient-to-br from-slate-700/40 to-slate-600/20 border-slate-500/30 hover:from-slate-600/60 hover:to-slate-500/40",
+    booked:
+      "bg-gradient-to-br from-green-600/70 to-emerald-600/60 border-green-400/70 shadow-lg shadow-green-500/40 hover:shadow-2xl hover:from-green-500/90 hover:to-emerald-500/80",
+    leave:
+      "bg-gradient-to-br from-purple-600/70 to-violet-600/60 border-purple-400/70 shadow-lg shadow-purple-500/30 hover:shadow-2xl hover:from-purple-500/90 hover:to-violet-500/80",
+  };
   return e.jsx("div", {
     className:
       "fixed inset-0 z-50 flex items-center justify-center p-5 sm:p-4 bg-black/60 backdrop-blur-sm",
@@ -4225,7 +4264,7 @@ function pa({
           className:
             "p-4 sm:p-6 space-y-3 sm:space-y-4 max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-cyan-600 scrollbar-track-slate-700 flex-1",
           children: [
-            ((b = s == null ? void 0 : s.events) == null ? void 0 : b.length) >
+            ((D = s == null ? void 0 : s.events) == null ? void 0 : D.length) >
               0 &&
               e.jsxs("div", {
                 className: "space-y-2 sm:space-y-3",
@@ -4235,21 +4274,21 @@ function pa({
                       "text-white font-black text-xs sm:text-sm uppercase tracking-widest opacity-80",
                     children: [
                       "📋 Events (",
-                      (C = s == null ? void 0 : s.events) == null
+                      (j = s == null ? void 0 : s.events) == null
                         ? void 0
-                        : C.length,
+                        : j.length,
                       ")",
                     ],
                   }),
-                  (j = s == null ? void 0 : s.events) == null
+                  (T = s == null ? void 0 : s.events) == null
                     ? void 0
-                    : j.map((f, $) =>
+                    : T.map((w, F) =>
                         e.jsxs(
                           "div",
                           {
-                            title: (f == null ? void 0 : f.tooltip) || "",
-                            className: `p-3 sm:p-4 rounded-xl border-2 ${f.color || "border-gray-500 bg-gray-700/20"} transform hover:scale-105 transition-all duration-300 hover:shadow-2xl`,
-                            style: { animationDelay: `${$ * 50}ms` },
+                            title: (w == null ? void 0 : w.tooltip) || "",
+                            className: `p-3 sm:p-4 rounded-xl border-2 ${p[w.event] || "border-gray-500 bg-gray-700/20"} transform hover:scale-105 transition-all duration-300 hover:shadow-2xl`,
+                            style: { animationDelay: `${F * 50}ms` },
                             children: [
                               e.jsx("div", {
                                 className: "flex items-start justify-between",
@@ -4260,14 +4299,14 @@ function pa({
                                       className:
                                         "font-bold text-white mb-1 sm:mb-2 flex items-center gap-1 sm:gap-2 text-base sm:text-lg",
                                       children: [
-                                        f.icon,
+                                        w.icon,
                                         e.jsx("span", {
                                           className: "text-xl sm:text-2xl",
-                                          children: f.name,
+                                          children: w.name,
                                         }),
                                       ],
                                     }),
-                                    f.time &&
+                                    w.time &&
                                       e.jsxs("p", {
                                         className:
                                           "text-white/80 text-xs sm:text-sm flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2 font-semibold",
@@ -4276,22 +4315,22 @@ function pa({
                                             size: 14,
                                             className: "text-cyan-300",
                                           }),
-                                          f.time,
+                                          w.time,
                                         ],
                                       }),
-                                    f.amount !== void 0 &&
+                                    w.amount !== void 0 &&
                                       e.jsxs("p", {
-                                        className: `text-xs sm:text-sm font-bold flex items-center gap-1 sm:gap-2 ${f.amount === 0 ? "text-red-300" : "text-green-300"}`,
+                                        className: `text-xs sm:text-sm font-bold flex items-center gap-1 sm:gap-2 ${w.amount === 0 ? "text-red-300" : "text-green-300"}`,
                                         children: [
                                           e.jsx(ke, { size: 14 }),
                                           "₹",
-                                          f.amount,
+                                          w.amount,
                                         ],
                                       }),
                                   ],
                                 }),
                               }),
-                              k &&
+                              S &&
                                 e.jsx("button", {
                                   onClick: () => x(t),
                                   className:
@@ -4303,14 +4342,14 @@ function pa({
                                 }),
                             ],
                           },
-                          $,
+                          F,
                         ),
                       ),
                 ],
               }),
-            ((A = s == null ? void 0 : s.events) == null
+            ((k = s == null ? void 0 : s.events) == null
               ? void 0
-              : A.length) === 0 &&
+              : k.length) === 0 &&
               e.jsx("div", {
                 className:
                   "p-4 sm:p-5 rounded-xl bg-gradient-to-br from-slate-600/30 to-slate-500/20 border-2 border-slate-400/40 text-center transform hover:scale-105 transition-all duration-300",
@@ -4319,7 +4358,7 @@ function pa({
                   children: "✨ No events",
                 }),
               }),
-            g &&
+            u &&
               e.jsxs("div", {
                 className:
                   "space-y-3 sm:space-y-4 pt-3 sm:pt-4 border-t border-cyan-400/20 animate-slide-up",
@@ -4364,16 +4403,16 @@ function pa({
     }),
   });
 }
-function ba() {
-  var T;
+function pa() {
+  var A;
   const { user: t } = xe(),
     [r, a] = n.useState(!1),
     [c, x] = n.useState(new Date().getFullYear()),
-    [s, p] = n.useState(new Date().getMonth()),
+    [s, b] = n.useState(new Date().getMonth()),
     [h, d] = n.useState(t == null ? void 0 : t.empNo),
-    [y, E] = n.useState(null),
-    [g, k] = n.useState([]),
-    [b, C] = n.useState({
+    [v, E] = n.useState(null),
+    [u, S] = n.useState([]),
+    [p, D] = n.useState({
       Bookings: [],
       Amount: 0,
       PerMeal: 0,
@@ -4399,9 +4438,9 @@ function ba() {
       "November",
       "December",
     ],
-    A = async () => {
+    T = async () => {
       a(!0),
-        C({
+        D({
           Bookings: [],
           Amount: 0,
           PerMeal: 0,
@@ -4412,103 +4451,103 @@ function ba() {
         });
       try {
         const {
-          error: w,
-          message: v,
-          data: F,
+          error: y,
+          message: f,
+          data: z,
         } = await re.post(`/foodease/calendar/report/${h}`, {
           year: c,
           month: s + 1 > 9 ? s + 1 : "0" + (s + 1),
         });
-        if (w) {
-          console.log(v);
+        if (y) {
+          console.log(f);
           return;
-        } else F && C(F);
-      } catch (w) {
-        console.log("API call failed:", w);
+        } else z && D(z);
+      } catch (y) {
+        console.log("API call failed:", y);
       } finally {
         a(!1);
       }
     };
   n.useEffect(() => {
-    A();
+    T();
   }, [h, s, c]);
-  const f = [2024, 2025, 2026],
-    $ = () => {
-      a(!0), A();
+  const k = [2024, 2025, 2026],
+    w = () => {
+      a(!0), T();
     },
-    z = () => {
+    F = () => {
       window.history.back();
     },
-    u = (() => {
-      const w = new Date(c, s + 1, 0).getDate();
+    g = (() => {
+      const y = new Date(c, s + 1, 0).getDate();
       return {
         month: j[s],
         year: c,
-        totalBookings: b.Bookings.length,
-        totalCancelled: b.Canceled.length,
-        totalAmount: b.Amount,
-        perDayRate: b.PerMeal,
-        totalWFH: b.WFH.length,
-        totalLeaves: b.LeaveDays.length,
-        workingDays: b.WorkingDays,
-        daysInMonth: w,
-        bookingDates: b.Bookings,
-        cancelledDates: b.Canceled,
-        wfhDates: b.WFH,
-        leaveDates: b.LeaveDays,
+        totalBookings: p.Bookings.length,
+        totalCancelled: p.Canceled.length,
+        totalAmount: p.Amount,
+        perDayRate: p.PerMeal,
+        totalWFH: p.WFH.length,
+        totalLeaves: p.LeaveDays.length,
+        workingDays: p.WorkingDays,
+        daysInMonth: y,
+        bookingDates: p.Bookings,
+        cancelledDates: p.Canceled,
+        wfhDates: p.WFH,
+        leaveDates: p.LeaveDays,
       };
     })(),
-    M = (w) => {
-      let v = [];
-      switch (w) {
+    M = (y) => {
+      let f = [];
+      switch (y) {
         case "booking":
-          v = u.bookingDates;
+          f = g.bookingDates;
           break;
         case "cancelled":
-          v = u.cancelledDates;
+          f = g.cancelledDates;
           break;
         case "wfh":
-          v = u.wfhDates;
+          f = g.wfhDates;
           break;
         case "leave":
-          v = u.leaveDates;
+          f = g.leaveDates;
           break;
       }
-      k(v), E(w);
+      S(f), E(y);
     },
-    S = (w) => {
-      let v = `FoodEase Report - ${u.month} ${u.year}
+    C = (y) => {
+      let f = `FoodEase Report - ${g.month} ${g.year}
 
 `;
       if (
-        ((v += `Total Bookings: ${u.totalBookings}
-Total Cancelled: ${u.totalCancelled}
+        ((f += `Total Bookings: ${g.totalBookings}
+Total Cancelled: ${g.totalCancelled}
 `),
-        (v += `Total Amount: ${u.totalAmount}
-Per Day Rate: ${u.perDayRate}
+        (f += `Total Amount: ${g.totalAmount}
+Per Day Rate: ${g.perDayRate}
 `),
-        w === "txt")
+        y === "txt")
       ) {
-        const F = new Blob([v], { type: "text/plain;charset=utf-8" }),
-          o = window.URL.createObjectURL(F),
+        const z = new Blob([f], { type: "text/plain;charset=utf-8" }),
+          o = window.URL.createObjectURL(z),
           R = document.createElement("a");
         (R.href = o),
-          (R.download = `foodease-report-${u.month}-${u.year}.txt`),
+          (R.download = `foodease-report-${g.month}-${g.year}.txt`),
           document.body.appendChild(R),
           R.click(),
           document.body.removeChild(R),
           window.URL.revokeObjectURL(o);
-      } else if (w === "csv") {
-        v = `Metric,Value
-Total Bookings,${u.totalBookings}
-Total Cancelled,${u.totalCancelled}
-Total Amount,${u.totalAmount}
-Per Day Rate,${u.perDayRate}`;
-        const F = new Blob([v], { type: "text/csv;charset=utf-8" }),
-          o = window.URL.createObjectURL(F),
+      } else if (y === "csv") {
+        f = `Metric,Value
+Total Bookings,${g.totalBookings}
+Total Cancelled,${g.totalCancelled}
+Total Amount,${g.totalAmount}
+Per Day Rate,${g.perDayRate}`;
+        const z = new Blob([f], { type: "text/csv;charset=utf-8" }),
+          o = window.URL.createObjectURL(z),
           R = document.createElement("a");
         (R.href = o),
-          (R.download = `foodease-report-${u.month}-${u.year}.csv`),
+          (R.download = `foodease-report-${g.month}-${g.year}.csv`),
           document.body.appendChild(R),
           R.click(),
           document.body.removeChild(R),
@@ -4584,7 +4623,7 @@ Per Day Rate,${u.perDayRate}`;
                   className: "flex items-center gap-3",
                   children: [
                     e.jsx("button", {
-                      onClick: z,
+                      onClick: F,
                       className:
                         "p-3 rounded-2xl border backdrop-blur-md shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center font-semibold bg-gradient-to-br from-blue-600/80 via-cyan-600/80 to-blue-700/80 hover:from-blue-500/90 hover:via-cyan-500/90 hover:to-blue-600/90 border-cyan-400/70 text-white shadow-blue-500/40 active:scale-95 hover:scale-110 animate-pulse-slow",
                       children: e.jsx(me, { className: "w-5 h-5" }),
@@ -4603,19 +4642,19 @@ Per Day Rate,${u.perDayRate}`;
                     "flex items-center gap-2 flex-wrap w-full sm:w-auto justify-end",
                   children: [
                     e.jsxs("button", {
-                      onClick: () => S("txt"),
+                      onClick: () => C("txt"),
                       className:
                         "px-3 py-2 rounded-2xl border backdrop-blur-md shadow-xl hover:shadow-2xl transition-all font-bold bg-gradient-to-br from-orange-600/80 to-amber-600/80 hover:from-orange-500/90 hover:to-amber-500/90 border-orange-400/70 text-white shadow-orange-500/40 active:scale-95 hover:scale-110 flex items-center gap-2 animate-pulse-slow",
                       children: [e.jsx(ze, { className: "w-5 h-5" }), " TXT"],
                     }),
                     e.jsxs("button", {
-                      onClick: () => S("csv"),
+                      onClick: () => C("csv"),
                       className:
                         "px-3 py-2 rounded-2xl border backdrop-blur-md shadow-xl hover:shadow-2xl transition-all font-bold bg-gradient-to-br from-green-600/80 to-emerald-600/80 hover:from-green-500/90 hover:to-emerald-500/90 border-green-400/70 text-white shadow-green-500/40 active:scale-95 hover:scale-110 flex items-center gap-2 animate-pulse-slow",
                       children: [e.jsx(ze, { className: "w-5 h-5" }), " CSV"],
                     }),
                     e.jsxs("button", {
-                      onClick: $,
+                      onClick: w,
                       className:
                         "px-3 py-2 rounded-2xl border backdrop-blur-md shadow-xl hover:shadow-2xl transition-all flex items-center gap-2 font-semibold bg-gradient-to-br from-pink-600/80 via-rose-600/80 to-pink-700/80 hover:from-pink-500/90 hover:via-rose-500/90 hover:to-pink-600/90 text-white border-pink-400/70 shadow-pink-500/40 active:scale-95 hover:scale-110",
                       children: [
@@ -4658,21 +4697,21 @@ Per Day Rate,${u.perDayRate}`;
                         }),
                         e.jsx("select", {
                           value: c,
-                          onChange: (w) => x(parseInt(w.target.value)),
+                          onChange: (y) => x(parseInt(y.target.value)),
                           className:
                             "w-full px-4 py-3 rounded-xl border bg-gray-900/80 border-blue-400/60 hover:border-blue-300/80 text-white font-bold focus:border-blue-300 outline-none transition-all cursor-pointer text-sm appearance-none bg-no-repeat pr-10 bg-right shadow-lg hover:shadow-xl backdrop-blur-md hover:animate-shake",
                           style: {
                             backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2360a5fa' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                           },
-                          children: f.map((w, v) =>
+                          children: k.map((y, f) =>
                             e.jsx(
                               "option",
                               {
-                                value: w,
+                                value: y,
                                 className: "bg-gray-900 text-white",
-                                children: w,
+                                children: y,
                               },
-                              v,
+                              f,
                             ),
                           ),
                         }),
@@ -4706,21 +4745,21 @@ Per Day Rate,${u.perDayRate}`;
                         }),
                         e.jsx("select", {
                           value: s,
-                          onChange: (w) => p(parseInt(w.target.value)),
+                          onChange: (y) => b(parseInt(y.target.value)),
                           className:
                             "w-full px-4 py-3 rounded-xl border bg-gray-900/80 border-blue-400/60 hover:border-blue-300/80 text-white font-bold focus:border-blue-300 outline-none transition-all cursor-pointer text-sm appearance-none bg-no-repeat pr-10 bg-right shadow-lg hover:shadow-xl backdrop-blur-md hover:animate-shake",
                           style: {
                             backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2360a5fa' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                           },
-                          children: j.map((w, v) =>
+                          children: j.map((y, f) =>
                             e.jsx(
                               "option",
                               {
-                                value: v,
+                                value: f,
                                 className: "bg-gray-900 text-white",
-                                children: w,
+                                children: y,
                               },
-                              v,
+                              f,
                             ),
                           ),
                         }),
@@ -4755,24 +4794,24 @@ Per Day Rate,${u.perDayRate}`;
                           }),
                           e.jsx("select", {
                             value: h,
-                            onChange: (w) => d(w.target.value),
+                            onChange: (y) => d(y.target.value),
                             className:
                               "w-full px-4 py-3 rounded-xl border bg-gray-900/80 border-pink-400/60 hover:border-pink-300/80 text-white font-bold focus:border-pink-300 outline-none transition-all cursor-pointer text-sm appearance-none bg-no-repeat pr-10 bg-right shadow-lg hover:shadow-xl backdrop-blur-md hover:animate-shake",
                             style: {
                               backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23f472b6' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                             },
                             children:
-                              (T = t == null ? void 0 : t.users) == null
+                              (A = t == null ? void 0 : t.users) == null
                                 ? void 0
-                                : T.map((w) =>
+                                : A.map((y) =>
                                     e.jsxs(
                                       "option",
                                       {
-                                        value: w.empNo,
+                                        value: y.empNo,
                                         className: "bg-gray-900 text-white",
-                                        children: [w.name, " (", w.empNo, ")"],
+                                        children: [y.name, " (", y.empNo, ")"],
                                       },
-                                      w.empNo,
+                                      y.empNo,
                                     ),
                                   ),
                           }),
@@ -4783,7 +4822,7 @@ Per Day Rate,${u.perDayRate}`;
               ],
             }),
             r
-              ? e.jsx(ua, {})
+              ? e.jsx(ga, {})
               : e.jsx("div", {
                   className:
                     "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6",
@@ -4791,7 +4830,7 @@ Per Day Rate,${u.perDayRate}`;
                     {
                       icon: "✅",
                       label: "Total Bookings",
-                      value: u.totalBookings,
+                      value: g.totalBookings,
                       gradient: "from-emerald-500 to-green-600",
                       border: "border-emerald-400",
                       text: "text-emerald-300",
@@ -4801,7 +4840,7 @@ Per Day Rate,${u.perDayRate}`;
                     {
                       icon: "❌",
                       label: "Total Cancelled",
-                      value: u.totalCancelled,
+                      value: g.totalCancelled,
                       gradient: "from-red-500 to-rose-600",
                       border: "border-red-400",
                       text: "text-red-300",
@@ -4811,7 +4850,7 @@ Per Day Rate,${u.perDayRate}`;
                     {
                       icon: "💰",
                       label: "Total Amount",
-                      value: `₹${u.totalAmount}`,
+                      value: `₹${g.totalAmount}`,
                       gradient: "from-yellow-500 to-orange-600",
                       border: "border-yellow-400",
                       text: "text-yellow-300",
@@ -4820,7 +4859,7 @@ Per Day Rate,${u.perDayRate}`;
                     {
                       icon: "📊",
                       label: "Per Day Rate",
-                      value: `₹${u.perDayRate}`,
+                      value: `₹${g.perDayRate}`,
                       gradient: "from-indigo-500 to-blue-600",
                       border: "border-indigo-400",
                       text: "text-indigo-300",
@@ -4829,7 +4868,7 @@ Per Day Rate,${u.perDayRate}`;
                     {
                       icon: "🏠",
                       label: "Total WFH",
-                      value: u.totalWFH,
+                      value: g.totalWFH,
                       gradient: "from-orange-500 to-amber-600",
                       border: "border-orange-400",
                       text: "text-orange-300",
@@ -4839,7 +4878,7 @@ Per Day Rate,${u.perDayRate}`;
                     {
                       icon: "🎉",
                       label: "Total Leaves",
-                      value: u.totalLeaves,
+                      value: g.totalLeaves,
                       gradient: "from-pink-500 to-rose-600",
                       border: "border-pink-400",
                       text: "text-pink-300",
@@ -4849,7 +4888,7 @@ Per Day Rate,${u.perDayRate}`;
                     {
                       icon: "📅",
                       label: "Working Days",
-                      value: u.workingDays,
+                      value: g.workingDays,
                       gradient: "from-violet-500 to-purple-600",
                       border: "border-violet-400",
                       text: "text-violet-300",
@@ -4858,17 +4897,17 @@ Per Day Rate,${u.perDayRate}`;
                     {
                       icon: "🔢",
                       label: "Days in Month",
-                      value: u.daysInMonth,
+                      value: g.daysInMonth,
                       gradient: "from-cyan-500 to-teal-600",
                       border: "border-cyan-400",
                       text: "text-cyan-300",
                       color: "cyan",
                     },
-                  ].map((w, v) =>
-                    e.jsx(ga, Q(W({}, w), { delay: v * 0.1 }), w.label),
+                  ].map((y, f) =>
+                    e.jsx(ua, Q(W({}, y), { delay: f * 0.1 }), y.label),
                   ),
                 }),
-            y && e.jsx(fa, { type: y, dates: g, onClose: () => E(null) }),
+            v && e.jsx(fa, { type: v, dates: u, onClose: () => E(null) }),
           ],
         }),
       }),
@@ -5013,7 +5052,7 @@ Per Day Rate,${u.perDayRate}`;
     ],
   });
 }
-function ua() {
+function ga() {
   return e.jsx("div", {
     className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6",
     children: [1, 2, 3, 4, 5, 6, 7, 8].map((t) =>
@@ -5059,18 +5098,18 @@ function ua() {
     ),
   });
 }
-function ga({
+function ua({
   icon: t,
   label: r,
   value: a,
   gradient: c,
   border: x,
   text: s,
-  onClick: p,
+  onClick: b,
   delay: h = 0,
   color: d = "blue",
 }) {
-  const y = {
+  const v = {
     emerald: "shadow-emerald-500/50",
     red: "shadow-red-500/50",
     yellow: "shadow-yellow-500/50",
@@ -5081,8 +5120,8 @@ function ga({
     cyan: "shadow-cyan-500/50",
   };
   return e.jsxs("div", {
-    onClick: p,
-    className: `p-6 rounded-3xl bg-gradient-to-br ${c}/20 ${x}/50 border backdrop-blur-lg shadow-xl hover:shadow-2xl transition-all duration-500 group relative overflow-hidden cursor-pointer hover:scale-110 active:scale-95 animate-stagger-fade ${y[d]} hover:${y[d]} hover:rotate-1`,
+    onClick: b,
+    className: `p-6 rounded-3xl bg-gradient-to-br ${c}/20 ${x}/50 border backdrop-blur-lg shadow-xl hover:shadow-2xl transition-all duration-500 group relative overflow-hidden cursor-pointer hover:scale-110 active:scale-95 animate-stagger-fade ${v[d]} hover:${v[d]} hover:rotate-1`,
     style: { animationDelay: `${h}s` },
     children: [
       e.jsx("div", {
@@ -5182,12 +5221,12 @@ function fa({ type: t, dates: r, onClose: a }) {
                     "text-center py-8 text-gray-500 text-base animate-pulse",
                   children: "No dates found",
                 })
-              : r.map((s, p) =>
+              : r.map((s, b) =>
                   e.jsxs(
                     "div",
                     {
                       className: `p-4 rounded-xl border backdrop-blur-xl transition-all hover:scale-105 hover:shadow-lg bg-gray-800/80 border-gray-700/50 text-gray-200 font-semibold flex items-center gap-3 text-sm group cursor-pointer animate-stagger-fade hover:bg-gray-700/90 hover:border-gray-600/70 bg-gradient-to-br ${x.gradient} hover:animate-shake`,
-                      style: { animationDelay: `${p * 0.05}s` },
+                      style: { animationDelay: `${b * 0.05}s` },
                       children: [
                         e.jsx("span", {
                           className: `${x.textColor} group-hover:scale-125 transition-transform text-lg group-hover:rotate-12 duration-300`,
@@ -5196,7 +5235,7 @@ function fa({ type: t, dates: r, onClose: a }) {
                         e.jsx("span", { className: "truncate", children: s }),
                       ],
                     },
-                    p,
+                    b,
                   ),
                 ),
         }),
@@ -5215,30 +5254,30 @@ function fa({ type: t, dates: r, onClose: a }) {
   });
 }
 function va() {
-  var i, I, l, D, U, L, B;
+  var i, I, l, $, _, L, B;
   const [t, r] = n.useState(1),
     [a, c] = n.useState(""),
     [x, s] = n.useState(""),
-    [p, h] = n.useState(""),
-    [d, y] = n.useState(!1),
-    [E, g] = n.useState(""),
-    [k, b] = n.useState(""),
-    [C, j] = n.useState(""),
-    [A, f] = n.useState(!1),
-    [$, z] = n.useState(!1),
-    [N, u] = n.useState(new Date(2025, 10, 16)),
+    [b, h] = n.useState(""),
+    [d, v] = n.useState(!1),
+    [E, u] = n.useState(""),
+    [S, p] = n.useState(""),
+    [D, j] = n.useState(""),
+    [T, k] = n.useState(!1),
+    [w, F] = n.useState(!1),
+    [N, g] = n.useState(new Date(2025, 10, 16)),
     M = new Date(2025, 10, 16),
-    S = M.getDate(),
-    T = new Date(N.getFullYear(), N.getMonth() + 1, 0).getDate(),
-    w = new Date(N.getFullYear(), N.getMonth(), 1).getDay(),
-    v = {
+    C = M.getDate(),
+    A = new Date(N.getFullYear(), N.getMonth() + 1, 0).getDate(),
+    y = new Date(N.getFullYear(), N.getMonth(), 1).getDay(),
+    f = {
       "EMP001-15": "booked",
       "EMP002-10": "leave",
       "EMP003-20": "wfh",
       "EMP004-05": "cancelled",
       "EMP005-25": "booked",
     },
-    F = new Set(Object.keys(v).map((m) => m.split("-")[1])),
+    z = new Set(Object.keys(f).map((m) => m.split("-")[1])),
     o = [
       {
         id: "EMP001",
@@ -5292,10 +5331,10 @@ function va() {
     ],
     R = o.filter(
       (m) =>
-        m.name.toLowerCase().includes(C.toLowerCase()) ||
-        m.id.toLowerCase().includes(C.toLowerCase()) ||
-        m.email.toLowerCase().includes(C.toLowerCase()) ||
-        m.role.toLowerCase().includes(C.toLowerCase()),
+        m.name.toLowerCase().includes(D.toLowerCase()) ||
+        m.id.toLowerCase().includes(D.toLowerCase()) ||
+        m.email.toLowerCase().includes(D.toLowerCase()) ||
+        m.role.toLowerCase().includes(D.toLowerCase()),
     ),
     O = [
       {
@@ -5348,55 +5387,55 @@ function va() {
       },
     ];
   n.useEffect(() => {
-    t === 2 && (f(!0), j(""));
+    t === 2 && (k(!0), j(""));
   }, [t]);
   const J = [];
-  for (let m = 0; m < w; m++) J.push(null);
-  for (let m = 1; m <= T; m++) J.push(m);
+  for (let m = 0; m < y; m++) J.push(null);
+  for (let m = 1; m <= A; m++) J.push(m);
   const ee = [];
   for (let m = 0; m < J.length; m += 7) ee.push(J.slice(m, m + 7));
   const se = () => {
       const m = `${x}-${a}`;
-      return v[m];
+      return f[m];
     },
     le = () => !!se(),
     he = async () => {
-      if (!a || !x || !p) {
-        b("Please complete all selections"), z(!1);
+      if (!a || !x || !b) {
+        p("Please complete all selections"), F(!1);
         return;
       }
-      y(!0), b(""), g("");
+      v(!0), p(""), u("");
       try {
         await new Promise((te) => setTimeout(te, 1500));
         const m = `${x}-${a}`;
-        v[m] = p;
+        f[m] = b;
         const X = N.toLocaleString("default", {
           month: "long",
           year: "numeric",
         });
-        g(`✅ Status updated successfully for ${a} ${X}`),
-          z(!1),
+        u(`✅ Status updated successfully for ${a} ${X}`),
+          F(!1),
           setTimeout(() => {
             r(1), c(""), s(""), h("");
           }, 2e3);
       } catch (m) {
-        b("Failed to update status. Please try again."), z(!1);
+        p("Failed to update status. Please try again."), F(!1);
       } finally {
-        y(!1);
+        v(!1);
       }
     },
     q = () => {
       t > 1 && (r(t - 1), t === 2 && c(""), t === 3 && s(""));
     },
     G = N.toLocaleString("default", { month: "long", year: "numeric" }),
-    pe = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    be = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     oe = (m) => {
       if (!m) return "";
-      const X = m === S && N.getMonth() === M.getMonth(),
+      const X = m === C && N.getMonth() === M.getMonth(),
         te =
           new Date(N.getFullYear(), N.getMonth(), m).getDay() === 0 ||
           new Date(N.getFullYear(), N.getMonth(), m).getDay() === 6,
-        Ee = F.has(m.toString().padStart(2, "0")),
+        Ee = z.has(m.toString().padStart(2, "0")),
         dt = a === m.toString().padStart(2, "0");
       let ne =
         "relative p-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-110 active:scale-95 cursor-pointer border-2 ";
@@ -5510,13 +5549,13 @@ function va() {
                 children: E,
               }),
             }),
-          k &&
+          S &&
             e.jsx("div", {
               className:
                 "mb-6 p-6 rounded-3xl bg-gradient-to-br from-red-600/20 to-rose-600/20 border border-red-400/50 backdrop-blur-lg animate-slide-in-right",
               children: e.jsx("p", {
                 className: "text-red-300 font-bold text-lg text-center",
-                children: k,
+                children: S,
               }),
             }),
           t === 1 &&
@@ -5555,7 +5594,7 @@ function va() {
                                   " ",
                                   e.jsxs("span", {
                                     className: "text-yellow-300",
-                                    children: ["• Today: ", S],
+                                    children: ["• Today: ", C],
                                   }),
                                 ],
                               }),
@@ -5568,7 +5607,7 @@ function va() {
                         children: [
                           e.jsx("button", {
                             onClick: () =>
-                              u(new Date(N.getFullYear(), N.getMonth() - 1)),
+                              g(new Date(N.getFullYear(), N.getMonth() - 1)),
                             className:
                               "p-2 rounded-lg hover:bg-gray-700/50 transition",
                             children: e.jsx(me, {
@@ -5581,7 +5620,7 @@ function va() {
                           }),
                           e.jsx("button", {
                             onClick: () =>
-                              u(new Date(N.getFullYear(), N.getMonth() + 1)),
+                              g(new Date(N.getFullYear(), N.getMonth() + 1)),
                             className:
                               "p-2 rounded-lg hover:bg-gray-700/50 transition",
                             children: e.jsx(rt, {
@@ -5592,7 +5631,7 @@ function va() {
                       }),
                       e.jsx("div", {
                         className: "grid grid-cols-7 gap-2 mb-4",
-                        children: pe.map((m) =>
+                        children: be.map((m) =>
                           e.jsx(
                             "div",
                             {
@@ -5622,14 +5661,14 @@ function va() {
                                               r(2);
                                           },
                                           className: oe(te),
-                                          title: F.has(
+                                          title: z.has(
                                             te.toString().padStart(2, "0"),
                                           )
                                             ? "Status already set"
                                             : "",
                                           children: [
                                             te,
-                                            F.has(
+                                            z.has(
                                               te.toString().padStart(2, "0"),
                                             ) &&
                                               e.jsx("div", {
@@ -5698,7 +5737,7 @@ function va() {
                         className: "relative z-30",
                         children: [
                           e.jsxs("button", {
-                            onClick: () => f(!A),
+                            onClick: () => k(!T),
                             className:
                               "w-full px-4 py-4 rounded-xl bg-gray-800/60 border border-gray-600/50 text-white font-semibold focus:border-slate-400/70 focus:outline-none transition-all backdrop-blur-md flex items-center justify-between text-lg",
                             children: [
@@ -5708,11 +5747,11 @@ function va() {
                                   : i.name)) ||
                                 "Select User",
                               e.jsx(me, {
-                                className: `w-5 h-5 transition-transform duration-300 ${A ? "rotate-90" : ""}`,
+                                className: `w-5 h-5 transition-transform duration-300 ${T ? "rotate-90" : ""}`,
                               }),
                             ],
                           }),
-                          A &&
+                          T &&
                             e.jsxs("div", {
                               className:
                                 "absolute z-40 w-full mt-2 bg-gray-900/95 rounded-xl shadow-2xl border border-gray-700/50 max-h-96 overflow-hidden backdrop-blur-xl",
@@ -5723,7 +5762,7 @@ function va() {
                                     type: "text",
                                     placeholder:
                                       "Search by name, ID, email, or role...",
-                                    value: C,
+                                    value: D,
                                     onChange: (m) => j(m.target.value),
                                     className:
                                       "w-full px-3 py-2 rounded-lg bg-gray-800/60 border border-gray-600/50 text-white font-semibold focus:border-slate-400/70 focus:outline-none transition-all placeholder-gray-400 text-sm",
@@ -5738,7 +5777,7 @@ function va() {
                                             "button",
                                             {
                                               onClick: () => {
-                                                s(m.id), f(!1), r(3);
+                                                s(m.id), k(!1), r(3);
                                               },
                                               className: `w-full p-4 border-b border-gray-700/30 transition-all text-left last:border-b-0 hover:bg-gray-800/60 flex items-center gap-3 group ${x === m.id ? "bg-gradient-to-br from-slate-600 to-gray-700 text-white" : "text-gray-300 hover:text-white"}`,
                                               children: [
@@ -5855,9 +5894,9 @@ function va() {
                               "button",
                               {
                                 onClick: () => {
-                                  h(m.value), z(!0);
+                                  h(m.value), F(!0);
                                 },
-                                className: `p-6 rounded-2xl border-2 transition-all transform hover:scale-105 active:scale-95 relative overflow-hidden group ${p === m.value ? `bg-gradient-to-br ${m.color} border-white/50 text-white shadow-xl ${m.glow}` : "bg-gray-800/60 border-gray-700/50 text-gray-300 hover:bg-gray-700/80 hover:border-gray-600/70"}`,
+                                className: `p-6 rounded-2xl border-2 transition-all transform hover:scale-105 active:scale-95 relative overflow-hidden group ${b === m.value ? `bg-gradient-to-br ${m.color} border-white/50 text-white shadow-xl ${m.glow}` : "bg-gray-800/60 border-gray-700/50 text-gray-300 hover:bg-gray-700/80 hover:border-gray-600/70"}`,
                                 children: e.jsxs("div", {
                                   className: "relative z-10 text-center",
                                   children: [
@@ -5884,8 +5923,8 @@ function va() {
                     }),
                   ],
                 }),
-                $ &&
-                  p &&
+                w &&
+                  b &&
                   e.jsx("div", {
                     className:
                       "fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 animate-fade-in-up",
@@ -5915,9 +5954,9 @@ function va() {
                                 e.jsx("span", { children: "⚠️" }),
                                 " Override:",
                                 " ",
-                                (D = O.find((m) => m.value === se())) == null
+                                ($ = O.find((m) => m.value === se())) == null
                                   ? void 0
-                                  : D.label,
+                                  : $.label,
                               ],
                             }),
                           }),
@@ -5949,9 +5988,9 @@ function va() {
                                 e.jsx("span", {
                                   className: "text-pink-400",
                                   children:
-                                    (U = o.find((m) => m.id === x)) == null
+                                    (_ = o.find((m) => m.id === x)) == null
                                       ? void 0
-                                      : U.name,
+                                      : _.name,
                                 }),
                               ],
                             }),
@@ -5967,11 +6006,11 @@ function va() {
                                   className:
                                     "text-purple-400 flex items-center gap-1",
                                   children: [
-                                    (L = O.find((m) => m.value === p)) == null
+                                    (L = O.find((m) => m.value === b)) == null
                                       ? void 0
                                       : L.label,
                                     " ",
-                                    (B = O.find((m) => m.value === p)) == null
+                                    (B = O.find((m) => m.value === b)) == null
                                       ? void 0
                                       : B.icon,
                                   ],
@@ -5985,7 +6024,7 @@ function va() {
                           children: [
                             e.jsx("button", {
                               onClick: () => {
-                                z(!1), h("");
+                                F(!1), h("");
                               },
                               className:
                                 "flex-1 py-3 px-4 rounded-xl bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 font-semibold transition-all border border-gray-600/50 active:scale-95",
@@ -6076,11 +6115,11 @@ const Je = [
   { path: "/users", element: e.jsx(oa, {}) },
   { path: "/booking", element: e.jsx(la, {}) },
   { path: "/calendar", element: e.jsx(ca, {}) },
-  { path: "/reports", element: e.jsx(ba, {}) },
+  { path: "/reports", element: e.jsx(pa, {}) },
   { path: "/manage", element: e.jsx(va, {}) },
   { path: "*", element: e.jsx(aa, {}) },
 ];
-function ya() {
+function wa() {
   var t = Z.get("appVersion") || "1.0.0";
   t = t.replace(/\./g, "_");
   const a = { "1_0_0": Je }[t] || Je;
@@ -6088,12 +6127,12 @@ function ya() {
 }
 let Y = null,
   ae = 0,
-  Ue = null,
+  _e = null,
   je = [];
 function V(t, r = {}) {
   H.emit(`SOCKET:${t}`, W({ type: t }, r));
 }
-function wa() {
+function ya() {
   var r;
   if (!Ie("wss") || Y) return;
   const t =
@@ -6137,8 +6176,8 @@ function ja() {
   }
 }
 function Qe() {
-  var c, x, s, p;
-  if (Ue) return;
+  var c, x, s, b;
+  if (_e) return;
   const t =
       (x =
         (c = P == null ? void 0 : P.realtime) == null
@@ -6147,11 +6186,11 @@ function Qe() {
         ? x
         : 5,
     r =
-      (p =
+      (b =
         (s = P == null ? void 0 : P.realtime) == null
           ? void 0
           : s.retryDelay) != null
-        ? p
+        ? b
         : 2e3;
   if (ae >= t) {
     V("reconnect_failed", { retries: ae });
@@ -6160,8 +6199,8 @@ function Qe() {
   const a = Math.min(r * Math.pow(2, ae), 3e4);
   ae++,
     V("reconnect_scheduled", { delay: a, attempt: ae }),
-    (Ue = setTimeout(() => {
-      (Ue = null),
+    (_e = setTimeout(() => {
+      (_e = null),
         V("reconnecting", { attempt: ae }),
         Y && !Y.connected && Y.connect();
     }, a));
@@ -6172,7 +6211,7 @@ function Na() {
 }
 const ka = async () => {
   try {
-    await ye({
+    await we({
       method: "GET",
       url: "/server/ping",
       timeout: 2e3,
@@ -6288,11 +6327,11 @@ function Ia() {
         H.emit(K.INSPECT_DETECTED, { open: !0 })));
   }, 1e3);
 }
-const _e = {
+const Ue = {
     inspectGuard: Ia,
     inputTracer: Sa,
     tabTracker: Na,
-    wss: wa,
+    wss: ya,
     isServerLive: ka,
   },
   Ea = () => {
@@ -6689,70 +6728,70 @@ const _e = {
     );
   };
 function Ta({ children: t }) {
-  var j, A;
+  var j, T;
   const [r, a] = n.useState(!1),
     [c, x] = n.useState(!1),
-    [s, p] = n.useState("idle"),
+    [s, b] = n.useState("idle"),
     [h, d] = n.useState(0),
-    [y, E] = n.useState(null),
-    g = (f, $) => {
-      const z = f.split(".").map(Number),
-        N = $.split(".").map(Number);
-      for (let u = 0; u < Math.max(z.length, N.length); u++) {
-        const M = z[u] || 0,
-          S = N[u] || 0;
-        if (M > S) return 1;
-        if (M < S) return -1;
+    [v, E] = n.useState(null),
+    u = (k, w) => {
+      const F = k.split(".").map(Number),
+        N = w.split(".").map(Number);
+      for (let g = 0; g < Math.max(F.length, N.length); g++) {
+        const M = F[g] || 0,
+          C = N[g] || 0;
+        if (M > C) return 1;
+        if (M < C) return -1;
       }
       return 0;
     };
   n.useEffect(() => {
     E(P.appVersion);
-    const $ = setTimeout(() => {
-      const z = Z.get("appVersion") || P.appVersion,
+    const w = setTimeout(() => {
+      const F = Z.get("appVersion") || P.appVersion,
         N = Z.get("skippedVersion"),
-        u = Z.get("lastSkipDate"),
+        g = Z.get("lastSkipDate"),
         M = Date.now(),
-        S = 1440 * 60 * 1e3;
-      if (y && g(y, z) > 0) {
-        const T = !N || N !== y || !u || M - u > 1 * S;
-        x(T);
+        C = 1440 * 60 * 1e3;
+      if (v && u(v, F) > 0) {
+        const A = !N || N !== v || !g || M - g > 1 * C;
+        x(A);
       }
       Z.get("appVersion") || Z.set("appVersion", P.appVersion);
     }, 500);
-    return () => clearTimeout($);
-  }, [y]);
-  const k = () => {
-      Z.set("skippedVersion", y),
+    return () => clearTimeout(w);
+  }, [v]);
+  const S = () => {
+      Z.set("skippedVersion", v),
         Z.set("lastSkipDate", Date.now()),
         setTimeout(() => {
           x(!1);
         }, 300);
     },
-    b = () => {
-      p("checking"),
+    p = () => {
+      b("checking"),
         d(0),
         setTimeout(() => {
-          p("downloading"), d(15);
+          b("downloading"), d(15);
         }, 1200);
-      const f = setInterval(() => {
-        d(($) => ($ >= 85 ? (clearInterval(f), 85) : $ + Math.random() * 20));
+      const k = setInterval(() => {
+        d((w) => (w >= 85 ? (clearInterval(k), 85) : w + Math.random() * 20));
       }, 300);
       setTimeout(() => {
-        clearInterval(f), p("installing"), d(90);
+        clearInterval(k), b("installing"), d(90);
       }, 3e3),
         setTimeout(() => {
-          d(100), p("complete");
+          d(100), b("complete");
         }, 4500),
         setTimeout(() => {
           window.location.reload();
         }, 5500),
         Z.remove("skippedVersion"),
         Z.remove("lastSkipDate"),
-        Z.set("appVersion", y);
+        Z.set("appVersion", v);
     };
-  if (!c || !y) return t;
-  const C = Z.get("appVersion") || P.appVersion;
+  if (!c || !v) return t;
+  const D = Z.get("appVersion") || P.appVersion;
   return e.jsxs("div", {
     className:
       "w-full min-h-screen bg-gradient-to-br from-slate-950 via-purple-900 to-slate-950 flex items-center justify-center p-4 relative overflow-hidden",
@@ -6804,7 +6843,7 @@ function Ta({ children: t }) {
                   }),
                   e.jsxs("p", {
                     className: "text-purple-100 text-sm font-medium",
-                    children: [C, " → ", y],
+                    children: [D, " → ", v],
                   }),
                 ],
               }),
@@ -6828,7 +6867,7 @@ function Ta({ children: t }) {
                           children: [
                             e.jsxs("span", {
                               className: "font-semibold text-white text-sm",
-                              children: ["What's New in v", y],
+                              children: ["What's New in v", v],
                             }),
                             e.jsx(zt, {
                               className:
@@ -6840,7 +6879,7 @@ function Ta({ children: t }) {
                           className: "space-y-3 pt-2",
                           children: [
                             e.jsxs("button", {
-                              onClick: b,
+                              onClick: p,
                               className:
                                 "w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 rounded-xl transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 shadow-lg hover:shadow-pink-500/50",
                               children: [
@@ -6849,7 +6888,7 @@ function Ta({ children: t }) {
                               ],
                             }),
                             e.jsxs("button", {
-                              onClick: k,
+                              onClick: S,
                               className:
                                 "w-full bg-gradient-to-r from-blue-500/30 to-cyan-500/30 hover:from-blue-500/50 hover:to-cyan-500/50 text-slate-100 font-semibold py-3 rounded-xl transition-all border border-blue-400/60 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-cyan-500/30 backdrop-blur-sm",
                               children: [
@@ -6949,33 +6988,33 @@ function Ta({ children: t }) {
                               "Download",
                               "Install",
                               "Complete",
-                            ].map((f, $) => {
+                            ].map((k, w) => {
                               const N = [
                                   "checking",
                                   "downloading",
                                   "installing",
                                   "complete",
                                 ].indexOf(s),
-                                u = $ < N || ($ === N && s === "complete"),
-                                M = $ === N;
+                                g = w < N || (w === N && s === "complete"),
+                                M = w === N;
                               return e.jsxs(
                                 "div",
                                 {
-                                  className: `text-center p-2 rounded-lg transition-all ${u ? "bg-green-500/30 border border-green-400/60" : M ? "bg-purple-500/40 border border-purple-400/60 animate-pulse" : "bg-white/10 border border-white/20"}`,
+                                  className: `text-center p-2 rounded-lg transition-all ${g ? "bg-green-500/30 border border-green-400/60" : M ? "bg-purple-500/40 border border-purple-400/60 animate-pulse" : "bg-white/10 border border-white/20"}`,
                                   children: [
                                     e.jsx("p", {
                                       className:
                                         "text-xs font-semibold text-white",
-                                      children: f,
+                                      children: k,
                                     }),
-                                    u &&
+                                    g &&
                                       e.jsx("p", {
                                         className: "text-green-400 text-lg",
                                         children: "✓",
                                       }),
                                   ],
                                 },
-                                f,
+                                k,
                               );
                             }),
                           }),
@@ -7006,7 +7045,7 @@ function Ta({ children: t }) {
                     children: [
                       e.jsx("span", { children: "📝" }),
                       "Changelog v",
-                      y,
+                      v,
                     ],
                   }),
                   e.jsx("button", {
@@ -7020,39 +7059,39 @@ function Ta({ children: t }) {
               e.jsxs("div", {
                 className: "overflow-y-auto flex-1 p-6 space-y-6",
                 children: [
-                  (A = P == null ? void 0 : P.changelog) == null
+                  (T = P == null ? void 0 : P.changelog) == null
                     ? void 0
-                    : A.map((f) =>
+                    : T.map((k) =>
                         e.jsxs(
                           "div",
                           {
                             className: "space-y-4 animate-slide-up",
                             children: [
                               e.jsxs("div", {
-                                className: `inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold text-white bg-gradient-to-r ${f.badgeGradient} border ${f.borderColor} backdrop-blur-sm shadow-lg`,
+                                className: `inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold text-white bg-gradient-to-r ${k.badgeGradient} border ${k.borderColor} backdrop-blur-sm shadow-lg`,
                                 children: [
                                   e.jsx("span", {
                                     className: "text-lg",
-                                    children: f.icon,
+                                    children: k.icon,
                                   }),
-                                  f.category,
+                                  k.category,
                                 ],
                               }),
                               e.jsx("div", {
                                 className:
                                   "grid grid-cols-1 md:grid-cols-2 gap-4",
-                                children: f.items.map(($, z) =>
+                                children: k.items.map((w, F) =>
                                   e.jsx(
                                     "div",
                                     {
-                                      className: `bg-gradient-to-br ${f.gradient} hover:shadow-lg hover:-translate-y-1 border ${f.borderColor} rounded-xl p-4 transition-all space-y-2 group backdrop-blur-sm`,
+                                      className: `bg-gradient-to-br ${k.gradient} hover:shadow-lg hover:-translate-y-1 border ${k.borderColor} rounded-xl p-4 transition-all space-y-2 group backdrop-blur-sm`,
                                       children: e.jsxs("div", {
                                         className: "flex items-start gap-3",
                                         children: [
                                           e.jsx("div", {
                                             className:
                                               "text-3xl flex-shrink-0 group-hover:scale-110 transition-transform",
-                                            children: $.image,
+                                            children: w.image,
                                           }),
                                           e.jsxs("div", {
                                             className: "flex-1",
@@ -7060,25 +7099,25 @@ function Ta({ children: t }) {
                                               e.jsx("h4", {
                                                 className:
                                                   "text-white font-semibold text-sm",
-                                                children: $.title,
+                                                children: w.title,
                                               }),
                                               e.jsx("p", {
                                                 className:
                                                   "text-slate-300 text-xs mt-1",
-                                                children: $.description,
+                                                children: w.description,
                                               }),
                                             ],
                                           }),
                                         ],
                                       }),
                                     },
-                                    z,
+                                    F,
                                   ),
                                 ),
                               }),
                             ],
                           },
-                          f.id,
+                          k.id,
                         ),
                       ),
                   e.jsxs("div", {
@@ -7118,7 +7157,7 @@ function Ta({ children: t }) {
                   }),
                   e.jsx("button", {
                     onClick: () => {
-                      b(), a(!1);
+                      p(), a(!1);
                     },
                     className:
                       "flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-2.5 rounded-lg transition-all shadow-lg hover:shadow-pink-500/50",
@@ -7156,10 +7195,10 @@ function Aa() {
   const [t, r] = n.useState(0),
     [a, c] = n.useState(!1);
   n.useEffect(() => {
-    const p = setInterval(() => {
+    const b = setInterval(() => {
       r((h) => h + 1);
     }, 1e3);
-    return () => clearInterval(p);
+    return () => clearInterval(b);
   }, []);
   const x = () => {
       c(!0),
@@ -7167,9 +7206,9 @@ function Aa() {
           window.location.reload();
         }, 500);
     },
-    s = (p) => {
-      const h = Math.floor(p / 60),
-        d = p % 60;
+    s = (b) => {
+      const h = Math.floor(b / 60),
+        d = b % 60;
       return `${h}:${d.toString().padStart(2, "0")}`;
     };
   return e.jsxs("div", {
@@ -7243,14 +7282,14 @@ function Aa() {
                               e.jsx("div", {
                                 className:
                                   "flex-1 flex flex-col justify-center px-4 gap-2",
-                                children: [0, 1, 2].map((p) =>
+                                children: [0, 1, 2].map((b) =>
                                   e.jsxs(
                                     "div",
                                     {
                                       className: "flex items-center gap-2",
                                       children: [
                                         e.jsx("div", {
-                                          className: `w-2 h-2 rounded-full ${p === 0 ? "bg-red-500 animate-pulse" : "bg-slate-700"}`,
+                                          className: `w-2 h-2 rounded-full ${b === 0 ? "bg-red-500 animate-pulse" : "bg-slate-700"}`,
                                         }),
                                         e.jsx("div", {
                                           className:
@@ -7258,7 +7297,7 @@ function Aa() {
                                         }),
                                       ],
                                     },
-                                    p,
+                                    b,
                                   ),
                                 ),
                               }),
@@ -7404,23 +7443,23 @@ function Aa() {
     ],
   });
 }
-const Ua = () => {
+const _a = () => {
   const { setUser: t } = xe(),
     [r, a] = n.useState("SYSTEM_UPDATE"),
     [c, x] = n.useState(!1),
-    [s, p] = n.useState(!1);
+    [s, b] = n.useState(!1);
   return (
     n.useEffect(() => {
       (async () => {
         try {
-          const { error: d, data: y = [] } = await re.post(
+          const { error: d, data: v = [] } = await re.post(
             "/foodease/auth/user",
           );
           d
             ? (window.location.href =
                 "https://auth.ajayos.in/sso/prudent?next=" +
                 btoa(window.location.href).replace(/=/g, ""))
-            : (t(y), p(!0));
+            : (t(v), b(!0));
         } catch (d) {
           console.error("Error fetching user data:", d),
             (window.location.href =
@@ -7439,10 +7478,10 @@ const Ua = () => {
     }, []),
     n.useEffect(
       () => (
-        Object.keys(_e).forEach((h) => {
-          if (Ie(h) && typeof _e[h] == "function")
+        Object.keys(Ue).forEach((h) => {
+          if (Ie(h) && typeof Ue[h] == "function")
             try {
-              _e[h]();
+              Ue[h]();
             } catch (d) {
               console.error(
                 `[SystemGuard] Error initializing feature: ${h}`,
@@ -7455,14 +7494,14 @@ const Ua = () => {
       [],
     ),
     !c || !s
-      ? e.jsx(wt, {})
+      ? e.jsx(yt, {})
       : r === "LOADING"
         ? e.jsx(Ze, {})
         : r === "INSPECT_BLOCKER"
           ? e.jsx(Ea, {})
           : r === "SERVER_DOWN"
             ? e.jsx(Aa, {})
-            : e.jsx(Ze, { children: e.jsx(Ta, { children: e.jsx(ya, {}) }) })
+            : e.jsx(Ze, { children: e.jsx(Ta, { children: e.jsx(wa, {}) }) })
   );
 };
-export { Ua as default };
+export { _a as default };
