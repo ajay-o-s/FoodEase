@@ -1,43 +1,43 @@
-var ct = Object.defineProperty,
-  mt = Object.defineProperties;
-var xt = Object.getOwnPropertyDescriptors;
+var mt = Object.defineProperty,
+  xt = Object.defineProperties;
+var ht = Object.getOwnPropertyDescriptors;
 var Ye = Object.getOwnPropertySymbols;
-var ht = Object.prototype.hasOwnProperty,
-  bt = Object.prototype.propertyIsEnumerable;
+var bt = Object.prototype.hasOwnProperty,
+  pt = Object.prototype.propertyIsEnumerable;
 var Ve = (t, r, a) =>
     r in t
-      ? ct(t, r, { enumerable: !0, configurable: !0, writable: !0, value: a })
+      ? mt(t, r, { enumerable: !0, configurable: !0, writable: !0, value: a })
       : (t[r] = a),
   W = (t, r) => {
-    for (var a in r || (r = {})) ht.call(r, a) && Ve(t, a, r[a]);
-    if (Ye) for (var a of Ye(r)) bt.call(r, a) && Ve(t, a, r[a]);
+    for (var a in r || (r = {})) bt.call(r, a) && Ve(t, a, r[a]);
+    if (Ye) for (var a of Ye(r)) pt.call(r, a) && Ve(t, a, r[a]);
     return t;
   },
-  Q = (t, r) => mt(t, xt(r));
+  Q = (t, r) => xt(t, ht(r));
 import {
   d as Te,
-  e as pt,
+  e as gt,
   r as n,
   j as e,
   m as U,
-  F as gt,
-  f as ut,
-  A as ft,
+  F as ut,
+  f as ft,
+  A as vt,
   X as $e,
-  L as vt,
-  u as wt,
-  g as et,
-  h as yt,
-  B as jt,
-  i as Nt,
-  k as kt,
-  P as St,
-  C as Ct,
-  U as Dt,
+  L as wt,
+  u as yt,
+  g as tt,
+  h as jt,
+  B as Nt,
+  i as kt,
+  k as St,
+  P as Ct,
+  C as Dt,
+  U as $t,
   l as Be,
-  n as $t,
+  n as It,
   o as Ne,
-  p as It,
+  p as Et,
   q as Ce,
   s as ce,
   I as Ae,
@@ -46,30 +46,30 @@ import {
   v as pe,
   w as fe,
   x as Fe,
-  y as Et,
-  M as Tt,
+  y as Tt,
+  M as At,
   z as He,
-  E as tt,
-  G as at,
+  E as at,
+  G as rt,
   Z as ve,
-  J as At,
-  K as Mt,
-  N as Pt,
+  J as Mt,
+  K as Pt,
+  N as _t,
   O as We,
   Q as Ge,
   T as me,
-  V as rt,
+  V as st,
   W as ze,
-  Y as _t,
-  S as st,
-  _ as Lt,
-  $ as Rt,
-  a0 as Ut,
+  Y as Lt,
+  S as ot,
+  _ as Rt,
+  $ as Ut,
+  a0 as Ft,
   a1 as Xe,
-  a2 as Ft,
-  a3 as zt,
+  a2 as zt,
+  a3 as Ot,
 } from "./vendor.js";
-import { U as Ot, F as Bt } from "./index.js";
+import { U as Bt, F as Yt } from "./index.js";
 const Pe = (t) => `${btoa(`${t}`).replace(/=/g, "")}`,
   Ke = "super-secret-key-ajayos",
   Z = {
@@ -108,16 +108,16 @@ const Pe = (t) => `${btoa(`${t}`).replace(/=/g, "")}`,
       return this.get("seen", !1) ? !1 : (this.set("seen", !0), !0);
     },
   },
-  Yt = "foodease",
-  Vt = "1.0.0",
-  Ht = {
+  Vt = "foodease",
+  Ht = "1.0.0",
+  Wt = {
     inspectGuard: !0,
     inputTracer: !0,
     tabTracker: !0,
     wss: !1,
     isServerLive: !0,
   },
-  Wt = {
+  Gt = {
     url: "wss://api.ajayos.in",
     withCredentials: !0,
     reconnectionAttempts: 3,
@@ -129,14 +129,14 @@ const Pe = (t) => `${btoa(`${t}`).replace(/=/g, "")}`,
     multiplex: !0,
     path: "",
   },
-  Gt = {
+  Xt = {
     baseURL: "https://api.ajayos.in",
     timeout: 2e4,
     withCredentials: !0,
     retry: 2,
   },
-  Xt = "November 5, 2025",
-  Kt = [
+  Kt = "November 5, 2025",
+  qt = [
     {
       id: 1,
       category: "✨ New Features",
@@ -213,21 +213,21 @@ const Pe = (t) => `${btoa(`${t}`).replace(/=/g, "")}`,
       ],
     },
   ],
-  ot = {
-    projectName: Yt,
-    appVersion: Vt,
-    features: Ht,
-    ws: Wt,
-    api: Gt,
-    releaseDate: Xt,
-    changelog: Kt,
+  lt = {
+    projectName: Vt,
+    appVersion: Ht,
+    features: Wt,
+    ws: Gt,
+    api: Xt,
+    releaseDate: Kt,
+    changelog: qt,
   },
-  P = ot,
+  P = lt,
   Ie = (t) => {
     var r;
-    return !!((r = ot.features) != null && r[t]);
+    return !!((r = lt.features) != null && r[t]);
   };
-class qt {
+class Jt {
   constructor() {
     this.map = new Map();
   }
@@ -258,7 +258,7 @@ class qt {
       }
   }
 }
-const H = new qt(),
+const H = new Jt(),
   K = {
     API_LOADING: "api:loading",
     API_TRACE: "api:trace",
@@ -272,8 +272,8 @@ const H = new qt(),
     SERVER_NOT_PING: "server_not_ping",
   };
 let Se = localStorage.getItem("U1RBVElDX1VVSUQ");
-Se || ((Se = lt()), localStorage.setItem("U1RBVElDX1VVSUQ", Se));
-function lt(t = !1) {
+Se || ((Se = nt()), localStorage.setItem("U1RBVElDX1VVSUQ", Se));
+function nt(t = !1) {
   if (typeof crypto != "undefined") {
     if (crypto.getRandomValues) {
       const r = new Uint8Array(20);
@@ -297,11 +297,11 @@ function lt(t = !1) {
 }
 const De = (t) =>
   `${(t.method || "GET").toUpperCase()} ${t.baseURL || ""}${t.url || ""}`;
-function Jt(t) {
+function Qt(t) {
   return (
     (t.metadata = { start: Date.now() }),
     (t.headers["x-request-time"] = new Date().toISOString()),
-    (t.headers["x-request-id"] = lt(!0)),
+    (t.headers["x-request-id"] = nt(!0)),
     (t.headers["x-visitor-id"] = Se),
     (t.headers["x-request-timezone"] =
       Intl.DateTimeFormat().resolvedOptions().timeZone),
@@ -311,7 +311,7 @@ function Jt(t) {
     t
   );
 }
-async function Qt(t, r) {
+async function Zt(t, r) {
   var h, d, v, E, u, S;
   const a = t.config;
   if (!a || a._retrying) return Promise.reject(t);
@@ -364,10 +364,10 @@ async function Qt(t, r) {
     Promise.reject(b)
   );
 }
-const we = pt.create(P.api);
+const we = gt.create(P.api);
 we.interceptors.request.use(
   (t) => (
-    Jt(t),
+    Qt(t),
     t.loading === !0 &&
       H.emit(K.API_LOADING, { key: De(t), loading: !0, inFlight: 1 }),
     t
@@ -406,7 +406,7 @@ we.interceptors.response.use(
           ms: a,
           status: ((x = t.response) == null ? void 0 : x.status) || 0,
         }),
-      Qt(t, we)
+      Zt(t, we)
     );
   },
 );
@@ -447,7 +447,7 @@ const ie = async (t = "GET", r, a = {}, c = {}) => {
     delete: (t, r = {}, a = {}) => ie("DELETE", t, r, a),
     head: (t, r = {}, a = {}) => ie("HEAD", t, r, a),
   },
-  xe = () => n.useContext(Ot),
+  xe = () => n.useContext(Bt),
   _e = {
     hidden: { opacity: 0 },
     visible: {
@@ -465,9 +465,9 @@ const ie = async (t = "GET", r, a = {}, c = {}) => {
   },
   qe =
     "bg-gradient-to-r from-orange-600/30 via-red-600/30 to-rose-600/30 backdrop-blur-2xl border-b border-white/10 shadow-2xl relative after:absolute after:inset-0 after:bg-gradient-to-r after:from-orange-600/10 after:via-red-600/10 after:to-rose-600/10 after:animate-pulse",
-  Zt =
+  ea =
     "bg-gradient-to-br from-white/10 via-orange-50/20 to-rose-50/10 backdrop-blur-2xl border border-white/10 shadow-2xl before:absolute before:inset-0 before:bg-gradient-to-br before:from-orange-500/5 before:to-rose-500/5 before:animate-shimmer",
-  ea = `
+  ta = `
   @keyframes shimmer {
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
@@ -499,7 +499,7 @@ function Oe() {
     b = Array.from("FoodEase");
   return e.jsxs(e.Fragment, {
     children: [
-      e.jsx("style", { children: ea }),
+      e.jsx("style", { children: ta }),
       e.jsx("nav", {
         className: qe,
         children: e.jsx("div", {
@@ -524,7 +524,7 @@ function Oe() {
                           repeat: 1 / 0,
                           ease: "linear",
                         },
-                        children: e.jsx(gt, {
+                        children: e.jsx(ut, {
                           size: 32,
                           className:
                             "text-yellow-300 drop-shadow-lg group-hover:text-yellow-200 transition-colors",
@@ -537,7 +537,7 @@ function Oe() {
                           repeat: 1 / 0,
                           ease: "easeInOut",
                         },
-                        children: e.jsx(ut, {
+                        children: e.jsx(ft, {
                           size: 28,
                           className:
                             "text-white absolute -right-1 -bottom-1 drop-shadow-md group-hover:scale-110 transition-transform",
@@ -665,7 +665,7 @@ function Oe() {
           }),
         }),
       }),
-      e.jsx(ft, {
+      e.jsx(vt, {
         children:
           r &&
           e.jsxs(e.Fragment, {
@@ -679,7 +679,7 @@ function Oe() {
                 onClick: () => a(!1),
               }),
               e.jsxs(U.div, {
-                className: `${Zt} fixed z-50 top-1/2 left-1/2 w-[90%] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-3xl overflow-hidden`,
+                className: `${ea} fixed z-50 top-1/2 left-1/2 w-[90%] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-3xl overflow-hidden`,
                 initial: { scale: 0.7, opacity: 0, rotate: -10 },
                 animate: { scale: 1, opacity: 1, rotate: 0 },
                 exit: { scale: 0.7, opacity: 0, rotate: 10 },
@@ -824,7 +824,7 @@ function Oe() {
                               animate: { x: ["-100%", "100%", "-100%"] },
                               transition: { duration: 2, repeat: 1 / 0 },
                             }),
-                            e.jsx(vt, { size: 18, className: "relative z-10" }),
+                            e.jsx(wt, { size: 18, className: "relative z-10" }),
                             e.jsx("span", {
                               className: "relative z-10",
                               children: "Logout",
@@ -842,14 +842,14 @@ function Oe() {
     ],
   });
 }
-function ta() {
+function aa() {
   const { user: t } = xe(),
-    r = wt(),
+    r = yt(),
     c = [
       {
         id: 1,
         name: "Calendar",
-        icon: et,
+        icon: tt,
         color: "from-blue-600 via-cyan-500 to-blue-400",
         hoverColor: "hover:from-blue-700 hover:via-cyan-600 hover:to-blue-500",
         path: "/calendar",
@@ -858,7 +858,7 @@ function ta() {
       {
         id: 2,
         name: "Reports",
-        icon: yt,
+        icon: jt,
         color: "from-purple-600 via-pink-500 to-rose-400",
         hoverColor:
           "hover:from-purple-700 hover:via-pink-600 hover:to-rose-500",
@@ -868,7 +868,7 @@ function ta() {
       {
         id: 3,
         name: "Booking",
-        icon: jt,
+        icon: Nt,
         color: "from-orange-600 via-amber-500 to-yellow-400",
         hoverColor:
           "hover:from-orange-700 hover:via-amber-600 hover:to-yellow-500",
@@ -878,7 +878,7 @@ function ta() {
       {
         id: 4,
         name: "Manage",
-        icon: Nt,
+        icon: kt,
         color: "from-green-600 via-emerald-500 to-teal-400",
         hoverColor:
           "hover:from-green-700 hover:via-emerald-600 hover:to-teal-500",
@@ -888,7 +888,7 @@ function ta() {
       {
         id: 5,
         name: "Users",
-        icon: kt,
+        icon: St,
         color: "from-red-600 via-rose-500 to-pink-400",
         hoverColor: "hover:from-red-700 hover:via-rose-600 hover:to-pink-500",
         path: "/users",
@@ -1056,7 +1056,7 @@ function ta() {
         ],
       });
 }
-function aa() {
+function ra() {
   const [t, r] = n.useState(null);
   return e.jsxs("div", {
     className:
@@ -1125,7 +1125,7 @@ function aa() {
               children: [
                 e.jsx("div", {
                   className: "animate-float-slow",
-                  children: e.jsx(St, {
+                  children: e.jsx(Ct, {
                     size: 28,
                     "sm:size": 32,
                     "md:size": 40,
@@ -1135,7 +1135,7 @@ function aa() {
                 e.jsx("div", {
                   className: "animate-float-slow",
                   style: { animationDelay: "0.5s" },
-                  children: e.jsx(Ct, {
+                  children: e.jsx(Dt, {
                     size: 28,
                     "sm:size": 32,
                     "md:size": 40,
@@ -1145,7 +1145,7 @@ function aa() {
                 e.jsx("div", {
                   className: "animate-float-slow",
                   style: { animationDelay: "1s" },
-                  children: e.jsx(Dt, {
+                  children: e.jsx($t, {
                     size: 28,
                     "sm:size": 32,
                     "md:size": 40,
@@ -1182,7 +1182,7 @@ function aa() {
                   onClick: () => (window.location.href = "/"),
                   className: `flex items-center justify-center gap-2 px-5 sm:px-7 py-3 rounded-2xl font-bold transition-all duration-300 border-2 transform text-sm sm:text-base ${t === "home" ? "bg-gradient-to-r from-orange-500 to-rose-500 border-orange-200 text-white scale-110 shadow-2xl" : "bg-gradient-to-r from-orange-600/40 to-rose-600/40 backdrop-blur-md border-orange-400/60 text-orange-200 hover:text-white"}`,
                   children: [
-                    e.jsx($t, { size: 18, "sm:size": 20 }),
+                    e.jsx(It, { size: 18, "sm:size": 20 }),
                     "Back Home",
                   ],
                 }),
@@ -1262,7 +1262,7 @@ function aa() {
   });
 }
 const ge = "https://via.placeholder.com/64x64/4f46e5/ffffff?text=U",
-  ra = () =>
+  sa = () =>
     e.jsx(e.Fragment, {
       children: e.jsxs("div", {
         className:
@@ -1335,7 +1335,7 @@ const ge = "https://via.placeholder.com/64x64/4f46e5/ffffff?text=U",
         ],
       }),
     }),
-  sa = ({ message: t, type: r, onClose: a }) => {
+  oa = ({ message: t, type: r, onClose: a }) => {
     n.useEffect(() => {
       const s = setTimeout(a, 3500);
       return () => clearTimeout(s);
@@ -1346,7 +1346,7 @@ const ge = "https://via.placeholder.com/64x64/4f46e5/ffffff?text=U",
           : r === "error"
             ? "bg-gradient-to-r from-rose-600 via-red-500 to-orange-500"
             : "bg-gradient-to-r from-violet-600 via-cyan-500 to-blue-500",
-      x = r === "success" ? tt : ce;
+      x = r === "success" ? at : ce;
     return e.jsxs("div", {
       className: `fixed bottom-8 left-1/2 -translate-x-1/2 ${c} text-white px-8 py-5 rounded-2xl shadow-2xl flex items-center gap-4 z-[100] animate-slide-in-up animate-pulse hover:animate-none transition-all duration-400 hover:scale-105 transform-gpu`,
       children: [
@@ -1361,7 +1361,7 @@ const ge = "https://via.placeholder.com/64x64/4f46e5/ffffff?text=U",
       ],
     });
   };
-function oa() {
+function la() {
   const { user: t } = xe(),
     [r, a] = n.useState([]),
     [c, x] = n.useState(!0),
@@ -1606,7 +1606,7 @@ function oa() {
                     className:
                       "flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-emerald-600 text-white font-bold px-4 py-2.5 sm:px-6 sm:py-3 rounded-xl shadow-lg hover:from-violet-600 hover:to-cyan-600 hover:shadow-2xl hover:scale-105 transition-all duration-400 flex-1 sm:flex-none group",
                     children: [
-                      e.jsx(It, {
+                      e.jsx(Et, {
                         className:
                           "w-4 h-4 group-hover:scale-110 transition-transform duration-300",
                       }),
@@ -1663,7 +1663,7 @@ function oa() {
             className:
               "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6 auto-rows-fr",
             children: c
-              ? Array.from({ length: 8 }, (i, I) => e.jsx(ra, {}, I))
+              ? Array.from({ length: 8 }, (i, I) => e.jsx(sa, {}, I))
               : r.length > 0
                 ? J.map((i) =>
                     e.jsxs(
@@ -1915,7 +1915,7 @@ function oa() {
                       className:
                         "text-rose-100 text-sm mt-1 hover:text-rose-200 transition-colors duration-400 flex items-center justify-center gap-2",
                       children: [
-                        e.jsx(Et, { className: "w-4 h-4" }),
+                        e.jsx(Tt, { className: "w-4 h-4" }),
                         " ",
                         h.phone,
                       ],
@@ -1924,7 +1924,7 @@ function oa() {
                       className:
                         "text-rose-100 text-xs hover:text-rose-200 transition-colors duration-400 flex items-center justify-center gap-2",
                       children: [
-                        e.jsx(Tt, { className: "w-4 h-4" }),
+                        e.jsx(At, { className: "w-4 h-4" }),
                         " ",
                         h.email,
                       ],
@@ -2229,7 +2229,7 @@ function oa() {
                                   className:
                                     "w-5 h-5 cursor-pointer text-emerald-500",
                                 }),
-                                e.jsx(tt, { className: "w-5 h-5" }),
+                                e.jsx(at, { className: "w-5 h-5" }),
                                 " Active",
                               ],
                             }),
@@ -2546,7 +2546,7 @@ function oa() {
                                                   "w-5 h-5 text-cyan-300 transition-transform group-hover:rotate-12",
                                               }),
                                         }),
-                                        e.jsx(at, {
+                                        e.jsx(rt, {
                                           className:
                                             "w-5 h-5 text-gray-500 group-hover:text-emerald-400 transition-all duration-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 flex-shrink-0",
                                         }),
@@ -2588,11 +2588,11 @@ function oa() {
           ],
         }),
       z &&
-        e.jsx(sa, { message: z.message, type: z.type, onClose: () => o(null) }),
+        e.jsx(oa, { message: z.message, type: z.type, onClose: () => o(null) }),
     ],
   });
 }
-function la() {
+function na() {
   const [t, r] = n.useState([]),
     [a, c] = n.useState(!0),
     [x, s] = n.useState(null),
@@ -2892,7 +2892,7 @@ function la() {
                         e.jsxs("div", {
                           className: `text-sm font-bold mb-2 flex items-center gap-2 ${o ? "text-purple-300" : "opacity-90"}`,
                           children: [
-                            e.jsx(At, { className: "w-4 h-4" }),
+                            e.jsx(Mt, { className: "w-4 h-4" }),
                             "Available Users",
                           ],
                         }),
@@ -2908,7 +2908,7 @@ function la() {
                         e.jsxs("div", {
                           className: `text-sm font-bold mb-2 flex items-center gap-2 ${o ? "text-pink-300" : "opacity-90"}`,
                           children: [
-                            e.jsx(Mt, { className: "w-4 h-4" }),
+                            e.jsx(Pt, { className: "w-4 h-4" }),
                             "Total Users",
                           ],
                         }),
@@ -2940,7 +2940,7 @@ function la() {
                       disabled: d.length === 0,
                       className: `flex-1 px-6 py-4 rounded-xl font-bold text-lg shadow-xl transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${o ? "bg-gradient-to-r from-pink-600 to-red-500 text-white hover:from-pink-700 hover:to-red-600" : "bg-gradient-to-r from-pink-500 to-red-500 text-white hover:from-pink-600 hover:to-red-600"}`,
                       children: [
-                        e.jsx(Pt, { className: "w-5 h-5" }),
+                        e.jsx(_t, { className: "w-5 h-5" }),
                         "Start Booking (",
                         d.length,
                         ")",
@@ -3361,7 +3361,7 @@ function la() {
     ],
   });
 }
-function na({ className: t = "" }) {
+function ia({ className: t = "" }) {
   return e.jsxs("div", {
     className: `bg-gradient-to-br from-purple-800/60 via-pink-800/40 to-indigo-900/60 border border-purple-400/20 rounded-2xl p-2 sm:p-4 backdrop-blur-xl animate-pulse space-y-2 sm:space-y-4 ${t}`,
     children: [
@@ -3417,7 +3417,7 @@ function Le({ color: t }) {
     ],
   });
 }
-function ia({ className: t = "" }) {
+function da({ className: t = "" }) {
   return e.jsxs("div", {
     className: `bg-gradient-to-br from-blue-800/50 via-purple-800/50 to-pink-800/40 border border-cyan-400/20 rounded-2xl p-2 sm:p-4 sm:p-6 backdrop-blur-xl animate-pulse ${t}`,
     children: [
@@ -3473,7 +3473,7 @@ function ia({ className: t = "" }) {
     ],
   });
 }
-function da({ className: t = "" }) {
+function ca({ className: t = "" }) {
   return e.jsxs("div", {
     className: `bg-gradient-to-br from-cyan-800/50 via-teal-800/40 to-blue-900/60 border border-cyan-400/20 rounded-2xl p-2 sm:p-4 backdrop-blur-xl animate-pulse space-y-2 sm:space-y-4 ${t}`,
     children: [
@@ -3522,7 +3522,7 @@ function da({ className: t = "" }) {
     ],
   });
 }
-function ca() {
+function ma() {
   const { user: t } = xe(),
     [r, a] = n.useState(new Date()),
     [c, x] = n.useState([]),
@@ -3638,9 +3638,9 @@ function ca() {
             className:
               "pt-4 pb-4 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 sm:p-6",
             children: [
-              e.jsx(na, { className: "lg:col-span-3" }),
-              e.jsx(ia, { className: "lg:col-span-6" }),
-              e.jsx(da, { className: "lg:col-span-3" }),
+              e.jsx(ia, { className: "lg:col-span-3" }),
+              e.jsx(da, { className: "lg:col-span-6" }),
+              e.jsx(ca, { className: "lg:col-span-3" }),
             ],
           }),
           e.jsx("footer", {
@@ -3707,7 +3707,7 @@ function ca() {
                 e.jsx("div", {
                   className:
                     "lg:col-span-3 h-full space-y-2 lg:space-y-2 px-0 lg:px-2",
-                  children: e.jsx(ma, {
+                  children: e.jsx(xa, {
                     stats: s,
                     user: t,
                     events: c,
@@ -3719,7 +3719,7 @@ function ca() {
                 }),
                 e.jsx("div", {
                   className: "lg:col-span-6 h-full space-y-4",
-                  children: e.jsx(ha, {
+                  children: e.jsx(ba, {
                     currentDate: r,
                     events: c,
                     onMonthChange: F,
@@ -3729,7 +3729,7 @@ function ca() {
                 e.jsx("div", {
                   className:
                     "lg:col-span-3 h-full space-y-2 lg:space-y-2 px-0 lg:px-2",
-                  children: e.jsx(xa, {
+                  children: e.jsx(ha, {
                     stats: s,
                     user: t,
                     events: c,
@@ -3747,7 +3747,7 @@ function ca() {
           }),
           v &&
             h &&
-            e.jsx(ba, {
+            e.jsx(pa, {
               date: h,
               events: c,
               onClose: () => E(!1),
@@ -3810,7 +3810,7 @@ function ca() {
         ],
       });
 }
-function nt({ stats: t, pc: r = !1 }) {
+function it({ stats: t, pc: r = !1 }) {
   return e.jsx("div", {
     className: `pt-1 sm:pt-2  ${r ? "hidden lg:flex border-t border-gradient-to-r from-cyan-400/20 via-purple-400/20 to-pink-400/20" : "lg:hidden"}`,
     children: e.jsxs("div", {
@@ -3857,7 +3857,7 @@ function nt({ stats: t, pc: r = !1 }) {
     }),
   });
 }
-function it({ pc: t = !1, handleBack: r, onRefresh: a }) {
+function dt({ pc: t = !1, handleBack: r, onRefresh: a }) {
   return e.jsx("div", {
     className: `pt-2 sm:pt-4 ${t ? "hidden lg:flex" : "lg:hidden border-t border-purple-400/20"}`,
     children: e.jsxs("div", {
@@ -3879,7 +3879,7 @@ function it({ pc: t = !1, handleBack: r, onRefresh: a }) {
     }),
   });
 }
-function ma({
+function xa({
   stats: t,
   user: r,
   handleBack: a,
@@ -3936,10 +3936,10 @@ function ma({
             }),
         ],
       }),
-      e.jsx(it, { handleBack: a, onRefresh: c, pc: !1 }),
+      e.jsx(dt, { handleBack: a, onRefresh: c, pc: !1 }),
       e.jsx("div", {
         className: "flex-1 flex flex-col space-y-0",
-        children: e.jsx(nt, { stats: t, pc: !0 }),
+        children: e.jsx(it, { stats: t, pc: !0 }),
       }),
     ],
   });
@@ -4004,15 +4004,15 @@ function ue({ icon: t, label: r, color: a }) {
     ],
   });
 }
-function xa({ onRefresh: t, stats: r, handleBack: a }) {
+function ha({ onRefresh: t, stats: r, handleBack: a }) {
   return e.jsx("div", {
     className:
       "bg-gradient-to-br from-cyan-900/80 via-teal-900/60 to-blue-900/80 border border-cyan-400/30 rounded-2xl p-2 sm:p-4 backdrop-blur-xl animate-slide-up shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 hover:border-cyan-400/50 flex flex-col",
     children: e.jsxs("div", {
       className: "flex-1 flex flex-col space-y-2",
       children: [
-        e.jsx(it, { handleBack: a, onRefresh: t, pc: !0 }),
-        e.jsx(nt, { stats: r, pc: !1 }),
+        e.jsx(dt, { handleBack: a, onRefresh: t, pc: !0 }),
+        e.jsx(it, { stats: r, pc: !1 }),
         e.jsxs("div", {
           className:
             "pt-2 border-t border-cyan-400/20 flex-1 hidden lg:flex flex-col",
@@ -4060,7 +4060,7 @@ function xa({ onRefresh: t, stats: r, handleBack: a }) {
     }),
   });
 }
-function ha({ currentDate: t, events: r, onMonthChange: a, onDateClick: c }) {
+function ba({ currentDate: t, events: r, onMonthChange: a, onDateClick: c }) {
   const x = t.getFullYear(),
     s = t.getMonth(),
     b = [
@@ -4112,7 +4112,7 @@ function ha({ currentDate: t, events: r, onMonthChange: a, onDateClick: c }) {
             onClick: () => a(1),
             className:
               "p-2 sm:p-3 hover:bg-gradient-to-br hover:from-purple-500/40 hover:to-pink-500/30 rounded-lg transition-all duration-300 hover:scale-110 transform",
-            children: e.jsx(rt, {
+            children: e.jsx(st, {
               className: "w-5 sm:w-6 h-5 sm:h-6 text-cyan-300",
             }),
           }),
@@ -4189,7 +4189,7 @@ function ha({ currentDate: t, events: r, onMonthChange: a, onDateClick: c }) {
     ],
   });
 }
-function ba({
+function pa({
   date: t,
   events: r = [],
   onClose: a,
@@ -4401,7 +4401,7 @@ function ba({
     }),
   });
 }
-function pa() {
+function Je() {
   var A;
   const { user: t } = xe(),
     [r, a] = n.useState(!1),
@@ -4656,7 +4656,7 @@ Per Day Rate,${g.perDayRate}`;
                       className:
                         "px-3 py-2 rounded-2xl border backdrop-blur-md shadow-xl hover:shadow-2xl transition-all flex items-center gap-2 font-semibold bg-gradient-to-br from-pink-600/80 via-rose-600/80 to-pink-700/80 hover:from-pink-500/90 hover:via-rose-500/90 hover:to-pink-600/90 text-white border-pink-400/70 shadow-pink-500/40 active:scale-95 hover:scale-110",
                       children: [
-                        e.jsx(_t, {
+                        e.jsx(Lt, {
                           className: `w-5 h-5 ${r ? "animate-spin" : ""}`,
                         }),
                         " ",
@@ -4685,7 +4685,7 @@ Per Day Rate,${g.perDayRate}`;
                           className:
                             "block text-sm font-bold mb-4 flex items-center gap-2 text-indigo-200 animate-pulse",
                           children: [
-                            e.jsx(st, {
+                            e.jsx(ot, {
                               className:
                                 "w-5 h-5 text-indigo-300 animate-spin-slow",
                             }),
@@ -4733,7 +4733,7 @@ Per Day Rate,${g.perDayRate}`;
                           className:
                             "block text-sm font-bold mb-4 flex items-center gap-2 text-blue-200 animate-pulse",
                           children: [
-                            e.jsx(et, {
+                            e.jsx(tt, {
                               className:
                                 "w-5 h-5 text-blue-300 animate-bounce-slow",
                             }),
@@ -5434,14 +5434,14 @@ function va() {
           new Date(N.getFullYear(), N.getMonth(), m).getDay() === 0 ||
           new Date(N.getFullYear(), N.getMonth(), m).getDay() === 6,
         Ee = z.has(m.toString().padStart(2, "0")),
-        dt = a === m.toString().padStart(2, "0");
+        ct = a === m.toString().padStart(2, "0");
       let ne =
         "relative p-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-110 active:scale-95 cursor-pointer border-2 ";
       return (
         X
           ? (ne +=
               "bg-gradient-to-br from-yellow-400 to-orange-500 text-white border-yellow-300 shadow-lg shadow-yellow-500/50")
-          : dt
+          : ct
             ? (ne +=
                 "bg-gradient-to-br from-blue-500 to-cyan-600 text-white border-blue-300 shadow-lg shadow-blue-500/50")
             : Ee
@@ -5621,7 +5621,7 @@ function va() {
                               g(new Date(N.getFullYear(), N.getMonth() + 1)),
                             className:
                               "p-2 rounded-lg hover:bg-gray-700/50 transition",
-                            children: e.jsx(rt, {
+                            children: e.jsx(st, {
                               className: "w-5 h-5 text-gray-300",
                             }),
                           }),
@@ -6108,20 +6108,21 @@ function va() {
     ],
   });
 }
-const Je = [
-  { path: "/", element: e.jsx(ta, {}) },
-  { path: "/users", element: e.jsx(oa, {}) },
-  { path: "/booking", element: e.jsx(la, {}) },
-  { path: "/calendar", element: e.jsx(ca, {}) },
-  { path: "/reports", element: e.jsx(pa, {}) },
+const Qe = [
+  { path: "/", element: e.jsx(aa, {}) },
+  { path: "/users", element: e.jsx(la, {}) },
+  { path: "/booking", element: e.jsx(na, {}) },
+  { path: "/calendar", element: e.jsx(ma, {}) },
+  { path: "/reports", element: e.jsx(Je, {}) },
+  { path: "/report", element: e.jsx(Je, {}) },
   { path: "/manage", element: e.jsx(va, {}) },
-  { path: "*", element: e.jsx(aa, {}) },
+  { path: "*", element: e.jsx(ra, {}) },
 ];
 function wa() {
   var t = Z.get("appVersion") || "1.0.0";
   t = t.replace(/\./g, "_");
-  const a = { "1_0_0": Je }[t] || Je;
-  return Lt(a);
+  const a = { "1_0_0": Qe }[t] || Qe;
+  return Rt(a);
 }
 let Y = null,
   ae = 0,
@@ -6136,7 +6137,7 @@ function ya() {
   const t =
     ((r = P == null ? void 0 : P.ws) == null ? void 0 : r.url) ||
     window.location.origin;
-  (Y = Rt(t, P.ws)),
+  (Y = Ut(t, P.ws)),
     Y.on("connect", () => {
       (ae = 0), V("STATUS", { connected: !0, id: Y.id }), ja();
     }),
@@ -6147,10 +6148,10 @@ function ya() {
     Y.on("update", (a) => V("UPDATE", { data: a })),
     Y.on("connect_error", (a) => {
       V("ERROR", { message: a.message || "Connection error", attempt: ae }),
-        Qe();
+        Ze();
     }),
     Y.on("disconnect", (a) => {
-      V("DISCONNECT", { reason: a }), a !== "io client disconnect" && Qe();
+      V("DISCONNECT", { reason: a }), a !== "io client disconnect" && Ze();
     }),
     Y.on("reconnect_attempt", () => {
       V("RECONNECT_ATTEMPT", { attempt: ae });
@@ -6173,7 +6174,7 @@ function ja() {
     (je = []), V("flush_end");
   }
 }
-function Qe() {
+function Ze() {
   var c, x, s, b;
   if (Re) return;
   const t =
@@ -6582,7 +6583,7 @@ const Ue = {
       })
     );
   },
-  Ze = ({ children: t }) => {
+  et = ({ children: t }) => {
     const [r, a] = n.useState(0);
     return (
       n.useEffect(
@@ -6828,7 +6829,7 @@ function Ta({ children: t }) {
                   e.jsxs("div", {
                     className: "flex items-center gap-2",
                     children: [
-                      e.jsx(st, {
+                      e.jsx(ot, {
                         className: "w-5 h-5 text-yellow-300 animate-pulse",
                       }),
                       e.jsx("h1", {
@@ -6867,7 +6868,7 @@ function Ta({ children: t }) {
                               className: "font-semibold text-white text-sm",
                               children: ["What's New in v", v],
                             }),
-                            e.jsx(Ut, {
+                            e.jsx(Ft, {
                               className:
                                 "w-4 h-4 text-purple-200 group-hover:rotate-180 transition-transform",
                             }),
@@ -7315,7 +7316,7 @@ function Aa() {
                             children: e.jsx("div", {
                               className:
                                 "bg-red-500/30 p-2 rounded-full border border-red-500/60 backdrop-blur",
-                              children: e.jsx(Ft, {
+                              children: e.jsx(zt, {
                                 className: "w-5 h-5 text-red-300",
                               }),
                             }),
@@ -7408,7 +7409,7 @@ function Aa() {
             children: e.jsxs("div", {
               className: "flex items-center gap-4",
               children: [
-                e.jsx(zt, {
+                e.jsx(Ot, {
                   className: "w-5 h-5 text-red-400 flex-shrink-0 animate-pulse",
                 }),
                 e.jsxs("div", {
@@ -7431,7 +7432,7 @@ function Aa() {
                   rel: "noopener noreferrer",
                   className:
                     "text-red-400 hover:text-red-300 text-sm font-semibold flex items-center gap-1 flex-shrink-0",
-                  children: ["View ", e.jsx(at, { className: "w-3 h-3" })],
+                  children: ["View ", e.jsx(rt, { className: "w-3 h-3" })],
                 }),
               ],
             }),
@@ -7492,14 +7493,14 @@ const La = () => {
       [],
     ),
     !c || !s
-      ? e.jsx(Bt, {})
+      ? e.jsx(Yt, {})
       : r === "LOADING"
-        ? e.jsx(Ze, {})
+        ? e.jsx(et, {})
         : r === "INSPECT_BLOCKER"
           ? e.jsx(Ea, {})
           : r === "SERVER_DOWN"
             ? e.jsx(Aa, {})
-            : e.jsx(Ze, { children: e.jsx(Ta, { children: e.jsx(wa, {}) }) })
+            : e.jsx(et, { children: e.jsx(Ta, { children: e.jsx(wa, {}) }) })
   );
 };
 export { La as default };
