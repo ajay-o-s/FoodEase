@@ -8,7 +8,7 @@ var Ve = (t, r, a) =>
     r in t
       ? mt(t, r, { enumerable: !0, configurable: !0, writable: !0, value: a })
       : (t[r] = a),
-  W = (t, r) => {
+  G = (t, r) => {
     for (var a in r || (r = {})) bt.call(r, a) && Ve(t, a, r[a]);
     if (Ye) for (var a of Ye(r)) pt.call(r, a) && Ve(t, a, r[a]);
     return t;
@@ -95,8 +95,8 @@ const Pe = (t) => `${btoa(`${t}`).replace(/=/g, "")}`,
         typeof r == "string"
           ? (a = JSON.stringify({ __type: "string", value: r }))
           : (a = JSON.stringify(r));
-        const c = Te.AES.encrypt(a, Ke).toString();
-        localStorage.setItem(Pe(t), c);
+        const m = Te.AES.encrypt(a, Ke).toString();
+        localStorage.setItem(Pe(t), m);
       } catch (a) {
         console.error("Storage set error:", a);
       }
@@ -232,25 +232,25 @@ class Jt {
     this.map = new Map();
   }
   on(r, a) {
-    const c = this.map.get(r) || [];
-    return c.push(a), this.map.set(r, c), () => this.off(r, a);
+    const m = this.map.get(r) || [];
+    return m.push(a), this.map.set(r, m), () => this.off(r, a);
   }
   once(r, a) {
-    const c = this.on(r, (...x) => {
-      c(), a(...x);
+    const m = this.on(r, (...x) => {
+      m(), a(...x);
     });
-    return c;
+    return m;
   }
   off(r, a) {
-    const c = this.map.get(r) || [];
+    const m = this.map.get(r) || [];
     this.map.set(
       r,
-      c.filter((x) => x !== a),
+      m.filter((x) => x !== a),
     );
   }
   emit(r, ...a) {
-    const c = this.map.get(r) || [];
-    for (const x of c)
+    const m = this.map.get(r) || [];
+    for (const x of m)
       try {
         x(...a);
       } catch (s) {
@@ -259,7 +259,7 @@ class Jt {
   }
 }
 const H = new Jt(),
-  K = {
+  q = {
     API_LOADING: "api:loading",
     API_TRACE: "api:trace",
     ERROR: "app:error",
@@ -316,7 +316,7 @@ async function Zt(t, r) {
   const a = t.config;
   if (!a || a._retrying) return Promise.reject(t);
   (a._retrying = !0), (a.__retryCount = a.__retryCount || 0);
-  const c = Math.min(
+  const m = Math.min(
       (d = (h = a.retry) != null ? h : P.api.retry) != null ? d : 3,
       5,
     ),
@@ -330,11 +330,11 @@ async function Zt(t, r) {
   )
     return Promise.reject(t);
   let b = t;
-  for (; a.__retryCount < c; ) {
+  for (; a.__retryCount < m; ) {
     a.__retryCount += 1;
     const p = x * Math.pow(2, a.__retryCount - 1);
     P.api.trace &&
-      H.emit(K.API_TRACE, {
+      H.emit(q.API_TRACE, {
         method: a.method,
         url: a.url,
         retry: a.__retryCount,
@@ -345,18 +345,18 @@ async function Zt(t, r) {
       const D = await r(a);
       return (
         a.loading === !0 &&
-          H.emit(K.API_LOADING, { key: De(a), loading: !1, inFlight: 0 }),
+          H.emit(q.API_LOADING, { key: De(a), loading: !1, inFlight: 0 }),
         D
       );
     } catch (D) {
-      if (((b = D), a.__retryCount >= c)) break;
+      if (((b = D), a.__retryCount >= m)) break;
     }
   }
   return (
     a.loading === !0 &&
-      H.emit(K.API_LOADING, { key: De(a), loading: !1, inFlight: 0 }),
-    H.emit(K.ERROR, b),
-    H.emit(K.API_RETRY_END, {
+      H.emit(q.API_LOADING, { key: De(a), loading: !1, inFlight: 0 }),
+    H.emit(q.ERROR, b),
+    H.emit(q.API_RETRY_END, {
       method: a.method,
       url: a.url,
       attempts: a.__retryCount,
@@ -369,7 +369,7 @@ we.interceptors.request.use(
   (t) => (
     Qt(t),
     t.loading === !0 &&
-      H.emit(K.API_LOADING, { key: De(t), loading: !0, inFlight: 1 }),
+      H.emit(q.API_LOADING, { key: De(t), loading: !0, inFlight: 1 }),
     t
   ),
 );
@@ -381,9 +381,9 @@ we.interceptors.response.use(
       (((a = t.config.metadata) == null ? void 0 : a.start) || Date.now());
     return (
       t.config.loading === !0 &&
-        H.emit(K.API_LOADING, { key: De(t.config), loading: !1, inFlight: 0 }),
+        H.emit(q.API_LOADING, { key: De(t.config), loading: !1, inFlight: 0 }),
       P.api.trace &&
-        H.emit(K.API_TRACE, {
+        H.emit(q.API_TRACE, {
           method: t.config.method,
           url: t.config.url,
           ms: r,
@@ -393,14 +393,14 @@ we.interceptors.response.use(
     );
   },
   async (t) => {
-    var c, x;
+    var m, x;
     const r = t.config || {},
       a =
         Date.now() -
-        (((c = r.metadata) == null ? void 0 : c.start) || Date.now());
+        (((m = r.metadata) == null ? void 0 : m.start) || Date.now());
     return (
       P.api.trace &&
-        H.emit(K.API_TRACE, {
+        H.emit(q.API_TRACE, {
           method: r.method,
           url: r.url,
           ms: a,
@@ -410,7 +410,7 @@ we.interceptors.response.use(
     );
   },
 );
-const ie = async (t = "GET", r, a = {}, c = {}) => {
+const ie = async (t = "GET", r, a = {}, m = {}) => {
     var h;
     let x;
     function s(d = {}) {
@@ -419,7 +419,7 @@ const ie = async (t = "GET", r, a = {}, c = {}) => {
         .map((E) => `${v(E)}=${v(d[E])}`)
         .join("&");
     }
-    const b = W({ method: t.toUpperCase(), url: r }, c);
+    const b = G({ method: t.toUpperCase(), url: r }, m);
     if (["GET", "DELETE", "HEAD"].includes(t.toUpperCase())) {
       if (a && Object.keys(a).length) {
         const d = s(a),
@@ -439,7 +439,7 @@ const ie = async (t = "GET", r, a = {}, c = {}) => {
     }
     return x;
   },
-  re = {
+  ee = {
     get: (t, r = {}, a = {}) => ie("GET", t, r, a),
     post: (t, r = {}, a = {}) => ie("POST", t, r, a),
     put: (t, r = {}, a = {}) => ie("PUT", t, r, a),
@@ -476,7 +476,7 @@ const ie = async (t = "GET", r, a = {}, c = {}) => {
 function Oe() {
   const { user: t } = xe(),
     [r, a] = n.useState(!1),
-    [c, x] = n.useState(!0);
+    [m, x] = n.useState(!0);
   n.useEffect(() => {
     const h =
       window.matchMedia &&
@@ -489,7 +489,7 @@ function Oe() {
     );
   }, []);
   const s = async () => {
-      const { error: h } = await re.get("/auth/logout");
+      const { error: h } = await ee.get("/auth/logout");
       h ||
         ((window.location.href =
           "https://auth.ajayos.in/sso/prudent?next=" +
@@ -845,7 +845,7 @@ function Oe() {
 function aa() {
   const { user: t } = xe(),
     r = yt(),
-    c = [
+    m = [
       {
         id: 1,
         name: "Calendar",
@@ -964,7 +964,7 @@ function aa() {
                   e.jsx("div", {
                     className:
                       "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6",
-                    children: c.map((s) => {
+                    children: m.map((s) => {
                       const b = s.icon;
                       return e.jsx(
                         "div",
@@ -1340,7 +1340,7 @@ const ge = "https://via.placeholder.com/64x64/4f46e5/ffffff?text=U",
       const s = setTimeout(a, 3500);
       return () => clearTimeout(s);
     }, [a]);
-    const c =
+    const m =
         r === "success"
           ? "bg-gradient-to-r from-emerald-600 via-green-500 to-lime-500"
           : r === "error"
@@ -1348,7 +1348,7 @@ const ge = "https://via.placeholder.com/64x64/4f46e5/ffffff?text=U",
             : "bg-gradient-to-r from-violet-600 via-cyan-500 to-blue-500",
       x = r === "success" ? at : ce;
     return e.jsxs("div", {
-      className: `fixed bottom-8 left-1/2 -translate-x-1/2 ${c} text-white px-8 py-5 rounded-2xl shadow-2xl flex items-center gap-4 z-[100] animate-slide-in-up animate-pulse hover:animate-none transition-all duration-400 hover:scale-105 transform-gpu`,
+      className: `fixed bottom-8 left-1/2 -translate-x-1/2 ${m} text-white px-8 py-5 rounded-2xl shadow-2xl flex items-center gap-4 z-[100] animate-slide-in-up animate-pulse hover:animate-none transition-all duration-400 hover:scale-105 transform-gpu`,
       children: [
         e.jsx(x, { className: "w-6 h-6 animate-bounce" }),
         e.jsx("span", { className: "font-bold text-base", children: t }),
@@ -1364,7 +1364,7 @@ const ge = "https://via.placeholder.com/64x64/4f46e5/ffffff?text=U",
 function la() {
   const { user: t } = xe(),
     [r, a] = n.useState([]),
-    [c, x] = n.useState(!0),
+    [m, x] = n.useState(!0),
     [s, b] = n.useState(null),
     [h, d] = n.useState(null),
     [v, E] = n.useState(!1),
@@ -1396,7 +1396,7 @@ function la() {
           error: i,
           data: I = [],
           message: l,
-        } = await re.post(
+        } = await ee.post(
           "/foodease/get-users",
           {},
           { headers: { "Content-Type": "application/json" } },
@@ -1414,17 +1414,17 @@ function la() {
     J = n.useMemo(
       () =>
         r.filter((i) => {
-          var R, _, O, m, X;
+          var _, R, W, c, O;
           const I = g.toLowerCase(),
             l =
               !g ||
-              ((_ = (R = i.name) == null ? void 0 : R.toLowerCase()) == null
+              ((R = (_ = i.name) == null ? void 0 : _.toLowerCase()) == null
                 ? void 0
-                : _.includes(I)) ||
-              ((O = i.number) == null ? void 0 : O.includes(g)) ||
-              ((X = (m = i.id) == null ? void 0 : m.toLowerCase()) == null
+                : R.includes(I)) ||
+              ((W = i.number) == null ? void 0 : W.includes(g)) ||
+              ((O = (c = i.id) == null ? void 0 : c.toLowerCase()) == null
                 ? void 0
-                : X.includes(I)),
+                : O.includes(I)),
             $ =
               C === "all" ||
               (C === "iphone" && i.isIphone) ||
@@ -1433,7 +1433,7 @@ function la() {
         }),
       [r, g, C],
     ),
-    ee = () => {
+    te = () => {
       const i = {},
         I = j.empNo;
       return (
@@ -1449,7 +1449,7 @@ function la() {
       f(null);
       try {
         D(!0);
-        const { error: I } = await re.delete(`/foodease/users/${i}`, {
+        const { error: I } = await ee.delete(`/foodease/users/${i}`, {
           headers: { "Content-Type": "application/json" },
         });
         if (I) throw new Error(I);
@@ -1476,14 +1476,14 @@ function la() {
         E(!0);
     },
     he = (i) => {
-      S(i), T(Q(W({}, i), { empNo: i.empNo || i.id || "PTPL" })), w({}), E(!0);
+      S(i), T(Q(G({}, i), { empNo: i.empNo || i.id || "PTPL" })), w({}), E(!0);
     },
-    q = async () => {
-      if (ee())
+    X = async () => {
+      if (te())
         try {
           D(!0);
-          const i = W({}, j),
-            { error: I, message: l } = await re[
+          const i = G({}, j),
+            { error: I, message: l } = await ee[
               u != null && u.id ? "put" : "post"
             ](`/foodease/users${u != null && u.id ? `/${u.id}` : ""}`, i);
           I
@@ -1511,7 +1511,7 @@ function la() {
           D(!1);
         }
     },
-    G = () => {
+    K = () => {
       E(!1),
         S(null),
         T({
@@ -1662,7 +1662,7 @@ function la() {
           e.jsx("div", {
             className:
               "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6 auto-rows-fr",
-            children: c
+            children: m
               ? Array.from({ length: 8 }, (i, I) => e.jsx(sa, {}, I))
               : r.length > 0
                 ? J.map((i) =>
@@ -2040,7 +2040,7 @@ function la() {
             e.jsx("div", {
               className:
                 "fixed inset-0 bg-black/70 backdrop-blur-md z-40 transition-all duration-500 animate-fade-in",
-              onClick: G,
+              onClick: K,
             }),
             e.jsxs("div", {
               className:
@@ -2084,7 +2084,7 @@ function la() {
                           value: be,
                           onChange: (i) =>
                             T(
-                              Q(W({}, j), {
+                              Q(G({}, j), {
                                 empNo: `PTPL${i.target.value.replace(/\D/g, "").slice(0, 3)}`,
                               }),
                             ),
@@ -2131,7 +2131,7 @@ function la() {
                           value: j.amount,
                           onChange: (i) =>
                             T(
-                              Q(W({}, j), {
+                              Q(G({}, j), {
                                 amount: Math.max(
                                   0,
                                   parseInt(i.target.value) || 0,
@@ -2175,7 +2175,7 @@ function la() {
                                   name: "device",
                                   checked: j.isIphone,
                                   onChange: () =>
-                                    T(Q(W({}, j), { isIphone: !0 })),
+                                    T(Q(G({}, j), { isIphone: !0 })),
                                   className:
                                     "w-5 h-5 cursor-pointer text-violet-500",
                                 }),
@@ -2191,7 +2191,7 @@ function la() {
                                   name: "device",
                                   checked: !j.isIphone,
                                   onChange: () =>
-                                    T(Q(W({}, j), { isIphone: !1 })),
+                                    T(Q(G({}, j), { isIphone: !1 })),
                                   className:
                                     "w-5 h-5 cursor-pointer text-emerald-500",
                                 }),
@@ -2225,7 +2225,7 @@ function la() {
                                   name: "status",
                                   checked: j.status,
                                   onChange: () =>
-                                    T(Q(W({}, j), { status: !0 })),
+                                    T(Q(G({}, j), { status: !0 })),
                                   className:
                                     "w-5 h-5 cursor-pointer text-emerald-500",
                                 }),
@@ -2241,7 +2241,7 @@ function la() {
                                   name: "status",
                                   checked: !j.status,
                                   onChange: () =>
-                                    T(Q(W({}, j), { status: !1 })),
+                                    T(Q(G({}, j), { status: !1 })),
                                   className:
                                     "w-5 h-5 cursor-pointer text-rose-500",
                                 }),
@@ -2260,7 +2260,7 @@ function la() {
                     "p-6 bg-gradient-to-r from-cyan-600 via-emerald-500 to-lime-500 flex gap-4 flex-shrink-0",
                   children: [
                     e.jsxs("button", {
-                      onClick: q,
+                      onClick: X,
                       disabled: p,
                       className:
                         "flex-1 bg-white/20 hover:bg-white/40 disabled:bg-white/10 text-white font-bold px-6 py-3 rounded-xl transition-all duration-400 hover:scale-105 disabled:scale-100 flex items-center justify-center gap-2",
@@ -2278,7 +2278,7 @@ function la() {
                       ],
                     }),
                     e.jsx("button", {
-                      onClick: G,
+                      onClick: K,
                       disabled: p,
                       className:
                         "flex-1 bg-rose-500/30 hover:bg-rose-500/50 disabled:bg-rose-500/20 text-white font-bold px-6 py-3 rounded-xl transition-all duration-400 hover:scale-105 disabled:scale-100",
@@ -2594,7 +2594,7 @@ function la() {
 }
 function na() {
   const [t, r] = n.useState([]),
-    [a, c] = n.useState(!0),
+    [a, m] = n.useState(!0),
     [x, s] = n.useState(null),
     [b, h] = n.useState("main"),
     [d, v] = n.useState([]),
@@ -2611,20 +2611,20 @@ function na() {
   n.useEffect(() => {
     (async () => {
       try {
-        c(!0), s(null);
+        m(!0), s(null);
         const {
           error: $,
-          data: R = [],
-          message: _,
-        } = await re.post("/foodease/get_users");
-        if ($) return s(_);
-        r(R);
+          data: _ = [],
+          message: R,
+        } = await ee.post("/foodease/get_users");
+        if ($) return s(R);
+        r(_);
       } catch ($) {
         console.error("Failed to fetch users:", $),
           s($.message),
-          G("Failed to load users", "error");
+          K("Failed to load users", "error");
       } finally {
-        c(!1);
+        m(!1);
       }
     })();
   }, []);
@@ -2739,40 +2739,40 @@ function na() {
       };
       return $[String(l).toLowerCase()] || $.available;
     },
-    ee = (l) => {
-      const $ = t.find((_) => _.empNo === l),
-        R = N.includes(l);
-      (!$.status && !R) ||
-        v((_) => (_.includes(l) ? _.filter((O) => O !== l) : [..._, l]));
+    te = (l) => {
+      const $ = t.find((R) => R.empNo === l),
+        _ = N.includes(l);
+      (!$.status && !_) ||
+        v((R) => (R.includes(l) ? R.filter((W) => W !== l) : [...R, l]));
     },
     se = (l, $) => {
       $.stopPropagation(),
-        g((R) =>
-          R.includes(l)
-            ? (v((_) => _.filter((O) => O !== l)), R.filter((_) => _ !== l))
-            : [...R, l],
+        g((_) =>
+          _.includes(l)
+            ? (v((R) => R.filter((W) => W !== l)), _.filter((R) => R !== l))
+            : [..._, l],
         );
     },
     le = () => {
       const l = L.map(($) => $.empNo);
-      v(l), G("All available users selected!", "success");
+      v(l), K("All available users selected!", "success");
     },
     he = () => {
-      v([]), G("Selection cleared", "info");
+      v([]), K("Selection cleared", "info");
     },
-    q = (l, $ = "info") => {
-      const R = new Date().toLocaleTimeString();
-      u((_) => [
-        ..._,
-        { message: l, type: $, timestamp: R, id: Date.now() + Math.random() },
+    X = (l, $ = "info") => {
+      const _ = new Date().toLocaleTimeString();
+      u((R) => [
+        ...R,
+        { message: l, type: $, timestamp: _, id: Date.now() + Math.random() },
       ]);
     },
-    G = (l, $ = "success") => {
+    K = (l, $ = "success") => {
       F({ message: l, type: $ }), setTimeout(() => F(null), 3e3);
     },
     be = () => {
       if (d.length === 0) {
-        G("Please select at least one user", "error");
+        K("Please select at least one user", "error");
         return;
       }
       h("booking"),
@@ -2781,14 +2781,14 @@ function na() {
         C({ success: [], failed: [] }),
         y(!1),
         k(!0),
-        q(`🚀 Starting automated booking for ${d.length} user(s)`, "system");
+        X(`🚀 Starting automated booking for ${d.length} user(s)`, "system");
     },
-    oe = (l) => {
+    oe = async (l) => {
       if (l >= d.length) {
         k(!1),
           y(!0),
-          q("✨ All bookings completed!", "system"),
-          q(
+          X("✨ All bookings completed!", "system"),
+          X(
             `✓ Successful: ${M.success.length} | ✗ Failed: ${M.failed.length}`,
             "system",
           );
@@ -2796,24 +2796,21 @@ function na() {
       }
       j(!0), p(l);
       const $ = d[l],
-        R = t.find((_) => _.empNo === $);
-      q(`📋 Processing: ${R.name} (${R.empNo})`, "info"),
-        setTimeout(() => {
-          q("🔍 Verifying user details...", "info");
-        }, 300),
-        setTimeout(() => {
-          q(`📱 Phone: ${R.number}`, "info");
-        }, 600),
-        setTimeout(() => {
-          Math.random() > 0.1
-            ? (q(`✅ Booking confirmed for ${R.name}`, "success"),
-              C((O) => Q(W({}, O), { success: [...O.success, R] })))
-            : (q(`❌ Booking failed for ${R.name} - Network error`, "error"),
-              C((O) => Q(W({}, O), { failed: [...O.failed, R] })));
-        }, 900),
-        setTimeout(() => {
-          q("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━", "system"), j(!1);
-        }, 1200);
+        _ = t.find((O) => O.empNo === $);
+      X(`📋 Processing: ${_.name} (${_.empNo})`, "info"),
+        X("🔍 Verifying user details...", "info"),
+        X(`📱 Phone: ${_.number}`, "info");
+      const { error: R, message: W } = await ee.post("/foodease/form/fill", {
+        empNo: _.empNo,
+      });
+      !R
+        ? (X(`✅ Booking confirmed for ${_.name}`, "success"),
+          C((O) => Q(G({}, O), { success: [...O.success, _] })))
+        : (X(`❌ Booking failed for ${_.name} - Network error`, "error"),
+          X(W, "error"),
+          C((O) => Q(G({}, O), { failed: [...O.failed, _] }))),
+        X("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━", "system"),
+        j(!1);
     };
   n.useEffect(() => {
     if (T && !D && S < d.length) {
@@ -2825,7 +2822,7 @@ function na() {
   }, [T, D, S, d.length, oe]);
   const i = () => {
       const l = M.failed.map(($) => $.empNo);
-      v(l), h("main"), G(`${l.length} failed bookings ready for retry`, "info");
+      v(l), h("main"), K(`${l.length} failed bookings ready for retry`, "info");
     },
     I = () => {
       h("main"), k(!1), p(0);
@@ -2953,27 +2950,27 @@ function na() {
                     "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5",
                   children: B.map((l) => {
                     const $ = J(l.status),
-                      R = d.includes(l.empNo),
-                      _ = N.includes(l.empNo),
-                      O = ["none", "scheduled"].includes(l.status) || _,
-                      m = !["none", "scheduled"].includes(l.status);
+                      _ = d.includes(l.empNo),
+                      R = N.includes(l.empNo),
+                      W = ["none", "scheduled"].includes(l.status) || R,
+                      c = !["none", "scheduled"].includes(l.status);
                     return e.jsxs(
                       "div",
                       {
-                        className: `rounded-2xl border-2 p-5 cursor-pointer transition-all transform hover:scale-105 shadow-lg backdrop-blur-sm ${R ? (o ? "bg-gradient-to-br from-pink-900/70 to-purple-900/70 border-pink-500 shadow-pink-500/50" : "bg-gradient-to-br from-pink-100 to-purple-100 border-pink-500") : o ? "bg-gray-800/50 border-gray-700 hover:border-purple-500" : "bg-white border-gray-300 hover:border-purple-400"}`,
-                        onClick: () => ee(O ? l.empNo : null),
+                        className: `rounded-2xl border-2 p-5 cursor-pointer transition-all transform hover:scale-105 shadow-lg backdrop-blur-sm ${_ ? (o ? "bg-gradient-to-br from-pink-900/70 to-purple-900/70 border-pink-500 shadow-pink-500/50" : "bg-gradient-to-br from-pink-100 to-purple-100 border-pink-500") : o ? "bg-gray-800/50 border-gray-700 hover:border-purple-500" : "bg-white border-gray-300 hover:border-purple-400"}`,
+                        onClick: () => te(W ? l.empNo : null),
                         role: "button",
-                        tabIndex: O ? 0 : -1,
-                        onKeyDown: (X) => X.key === "Enter" && ee(l.empNo),
+                        tabIndex: W ? 0 : -1,
+                        onKeyDown: (O) => O.key === "Enter" && te(l.empNo),
                         children: [
                           e.jsxs("div", {
                             className: "flex items-start gap-3 mb-4",
                             children: [
                               e.jsx("input", {
                                 type: "checkbox",
-                                checked: R,
-                                onChange: () => ee(l.empNo),
-                                disabled: !O,
+                                checked: _,
+                                onChange: () => te(l.empNo),
+                                disabled: !W,
                                 className:
                                   "mt-1 h-6 w-6 accent-pink-600 cursor-pointer",
                               }),
@@ -3020,14 +3017,14 @@ function na() {
                                     className: "mr-2 text-lg",
                                     children: $.icon,
                                   }),
-                                  _ ? "Enabled" : $.label,
+                                  R ? "Enabled" : $.label,
                                 ],
                               }),
-                              m &&
+                              c &&
                                 e.jsx("button", {
-                                  onClick: (X) => se(l.empNo, X),
-                                  className: `text-xs font-bold px-3 py-2 rounded-xl transition-all transform hover:scale-110 ${_ ? (o ? "bg-red-500/30 text-red-300 border border-red-500 hover:bg-red-500/50" : "bg-red-200 text-red-800 hover:bg-red-300") : o ? "bg-green-500/30 text-green-300 border border-green-500 hover:bg-green-500/50" : "bg-green-200 text-green-800 hover:bg-green-300"}`,
-                                  children: _ ? "Disable" : "Enable",
+                                  onClick: (O) => se(l.empNo, O),
+                                  className: `text-xs font-bold px-3 py-2 rounded-xl transition-all transform hover:scale-110 ${R ? (o ? "bg-red-500/30 text-red-300 border border-red-500 hover:bg-red-500/50" : "bg-red-200 text-red-800 hover:bg-red-300") : o ? "bg-green-500/30 text-green-300 border border-green-500 hover:bg-green-500/50" : "bg-green-200 text-green-800 hover:bg-green-300"}`,
+                                  children: R ? "Disable" : "Enable",
                                 }),
                             ],
                           }),
@@ -3525,7 +3522,7 @@ function ca({ className: t = "" }) {
 function ma() {
   const { user: t } = xe(),
     [r, a] = n.useState(new Date()),
-    [c, x] = n.useState([]),
+    [m, x] = n.useState([]),
     [s, b] = n.useState({
       bookings: 0,
       totalAmount: 0,
@@ -3546,7 +3543,7 @@ function ma() {
         error: y,
         message: f,
         data: z,
-      } = await re.post(`/foodease/calendar/month/${p}`, {
+      } = await ee.post(`/foodease/calendar/month/${p}`, {
         year: C,
         month: A + 1 > 9 ? A + 1 : "0" + (A + 1),
       });
@@ -3559,15 +3556,15 @@ function ma() {
           totalAmount: L,
           totalBookings: B,
           totalCanceled: J,
-          amountPerMeal: ee,
+          amountPerMeal: te,
         } = z;
         x(o),
           b((se) =>
-            Q(W({}, se), {
+            Q(G({}, se), {
               totalAmount: L,
               bookings: B,
               cancelled: J,
-              amount: ee,
+              amount: te,
             }),
           );
       }
@@ -3592,7 +3589,7 @@ function ma() {
     k = async (C, A = !0) => {
       try {
         var [y, f, z] = C.split("-").map(Number);
-        await re.post(`/foodease/schedule/${p}`, {
+        await ee.post(`/foodease/schedule/${p}`, {
           year: y,
           month: f,
           day: z,
@@ -3607,7 +3604,7 @@ function ma() {
     w = async (C) => {
       try {
         var [A, y, f] = C.split("-").map(Number);
-        await re.put(`/foodease/schedule/${p}`, { year: A, month: y, day: f }),
+        await ee.put(`/foodease/schedule/${p}`, { year: A, month: y, day: f }),
           N(),
           E(!1);
       } catch (z) {
@@ -3710,7 +3707,7 @@ function ma() {
                   children: e.jsx(xa, {
                     stats: s,
                     user: t,
-                    events: c,
+                    events: m,
                     onRefresh: N,
                     handleBack: g,
                     selectedEmpNo: p,
@@ -3721,7 +3718,7 @@ function ma() {
                   className: "lg:col-span-6 h-full space-y-4",
                   children: e.jsx(ba, {
                     currentDate: r,
-                    events: c,
+                    events: m,
                     onMonthChange: F,
                     onDateClick: T,
                   }),
@@ -3732,7 +3729,7 @@ function ma() {
                   children: e.jsx(ha, {
                     stats: s,
                     user: t,
-                    events: c,
+                    events: m,
                     onRefresh: N,
                     handleBack: g,
                   }),
@@ -3749,7 +3746,7 @@ function ma() {
             h &&
             e.jsx(pa, {
               date: h,
-              events: c,
+              events: m,
               onClose: () => E(!1),
               handleBook: k,
               onChangeBooking: w,
@@ -3883,7 +3880,7 @@ function xa({
   stats: t,
   user: r,
   handleBack: a,
-  onRefresh: c,
+  onRefresh: m,
   selectedEmpNo: x,
   onEmpChange: s,
 }) {
@@ -3936,7 +3933,7 @@ function xa({
             }),
         ],
       }),
-      e.jsx(dt, { handleBack: a, onRefresh: c, pc: !1 }),
+      e.jsx(dt, { handleBack: a, onRefresh: m, pc: !1 }),
       e.jsx("div", {
         className: "flex-1 flex flex-col space-y-0",
         children: e.jsx(it, { stats: t, pc: !0 }),
@@ -3944,7 +3941,7 @@ function xa({
     ],
   });
 }
-function ye({ icon: t, label: r, value: a, color: c }) {
+function ye({ icon: t, label: r, value: a, color: m }) {
   const x = {
     green:
       "from-green-700/80 via-emerald-600/60 to-teal-700/60 border-green-400/50 shadow-lg shadow-green-500/20",
@@ -3954,7 +3951,7 @@ function ye({ icon: t, label: r, value: a, color: c }) {
       "from-yellow-700/80 via-amber-600/60 to-orange-700/60 border-yellow-400/50 shadow-lg shadow-yellow-500/20",
   };
   return e.jsx("div", {
-    className: `bg-gradient-to-br ${x[c]} border rounded-xl p-2 sm:p-4 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 hover:scale-105 transform`,
+    className: `bg-gradient-to-br ${x[m]} border rounded-xl p-2 sm:p-4 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 hover:scale-105 transform`,
     children: e.jsxs("div", {
       className: "flex items-center justify-between",
       children: [
@@ -3983,7 +3980,7 @@ function ye({ icon: t, label: r, value: a, color: c }) {
   });
 }
 function ue({ icon: t, label: r, color: a }) {
-  const c = {
+  const m = {
     green:
       "from-green-600/50 to-emerald-500/30 border-green-400/60 shadow-lg shadow-green-500/20",
     blue: "from-blue-600/50 to-cyan-500/30 border-cyan-400/60 shadow-lg shadow-cyan-500/20",
@@ -3994,7 +3991,7 @@ function ue({ icon: t, label: r, color: a }) {
       "from-purple-600/50 to-violet-500/30 border-purple-400/60 shadow-lg shadow-purple-500/20",
   };
   return e.jsxs("div", {
-    className: `flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg border bg-gradient-to-r ${c[a]} text-xs font-semibold text-white transition-all duration-300 hover:scale-105 transform hover:shadow-2xl`,
+    className: `flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg border bg-gradient-to-r ${m[a]} text-xs font-semibold text-white transition-all duration-300 hover:scale-105 transform hover:shadow-2xl`,
     children: [
       e.jsx("span", {
         className: "text-base sm:text-lg animate-float",
@@ -4060,7 +4057,7 @@ function ha({ onRefresh: t, stats: r, handleBack: a }) {
     }),
   });
 }
-function ba({ currentDate: t, events: r, onMonthChange: a, onDateClick: c }) {
+function ba({ currentDate: t, events: r, onMonthChange: a, onDateClick: m }) {
   const x = t.getFullYear(),
     s = t.getMonth(),
     b = [
@@ -4166,7 +4163,7 @@ function ba({ currentDate: t, events: r, onMonthChange: a, onDateClick: c }) {
             e.jsxs(
               "button",
               {
-                onClick: () => c(u),
+                onClick: () => m(u),
                 title: (p == null ? void 0 : p.tooltip) || "",
                 className: `aspect-square ${D} border rounded-lg flex flex-col items-center justify-center cursor-pointer hover:scale-110 transition-all duration-300 hover:shadow-2xl transform active:scale-95 font-bold text-white`,
                 children: [
@@ -4193,7 +4190,7 @@ function pa({
   date: t,
   events: r = [],
   onClose: a,
-  handleBook: c,
+  handleBook: m,
   onChangeBooking: x,
 }) {
   var D, j, T, k;
@@ -4370,13 +4367,13 @@ function pa({
                     className: "grid grid-cols-2 gap-2 sm:gap-3",
                     children: [
                       e.jsx("button", {
-                        onClick: () => c(t, !0),
+                        onClick: () => m(t, !0),
                         className:
                           "py-2 sm:py-3 px-3 sm:px-4 bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600 hover:from-green-500 hover:via-emerald-500 hover:to-teal-500 text-white font-bold rounded-lg transition-all text-xs sm:text-sm uppercase tracking-wider hover:shadow-2xl hover:scale-110 active:scale-95 transform shadow-lg",
                         children: "Schedule ✅",
                       }),
                       e.jsx("button", {
-                        onClick: () => c(t, !1),
+                        onClick: () => m(t, !1),
                         className:
                           "py-2 sm:py-3 px-3 sm:px-4 bg-gradient-to-br from-gray-600 via-slate-600 to-slate-700 hover:from-gray-500 hover:via-slate-500 hover:to-slate-600 text-white font-bold rounded-lg transition-all text-xs sm:text-sm uppercase tracking-wider hover:shadow-2xl hover:scale-110 active:scale-95 transform shadow-lg",
                         children: "Cancel ❌",
@@ -4405,7 +4402,7 @@ function Je() {
   var A;
   const { user: t } = xe(),
     [r, a] = n.useState(!1),
-    [c, x] = n.useState(new Date().getFullYear()),
+    [m, x] = n.useState(new Date().getFullYear()),
     [s, b] = n.useState(new Date().getMonth()),
     [h, d] = n.useState(t == null ? void 0 : t.empNo),
     [v, E] = n.useState(null),
@@ -4452,8 +4449,8 @@ function Je() {
           error: y,
           message: f,
           data: z,
-        } = await re.post(`/foodease/calendar/report/${h}`, {
-          year: c,
+        } = await ee.post(`/foodease/calendar/report/${h}`, {
+          year: m,
           month: s + 1 > 9 ? s + 1 : "0" + (s + 1),
         });
         if (y) {
@@ -4468,7 +4465,7 @@ function Je() {
     };
   n.useEffect(() => {
     T();
-  }, [h, s, c]);
+  }, [h, s, m]);
   const k = [2024, 2025, 2026],
     w = () => {
       a(!0), T();
@@ -4477,10 +4474,10 @@ function Je() {
       window.history.back();
     },
     g = (() => {
-      const y = new Date(c, s + 1, 0).getDate();
+      const y = new Date(m, s + 1, 0).getDate();
       return {
         month: j[s],
-        year: c,
+        year: m,
         totalBookings: p.Bookings.length,
         totalCancelled: p.Canceled.length,
         totalAmount: p.Amount,
@@ -4694,7 +4691,7 @@ Per Day Rate,${g.perDayRate}`;
                           ],
                         }),
                         e.jsx("select", {
-                          value: c,
+                          value: m,
                           onChange: (y) => x(parseInt(y.target.value)),
                           className:
                             "w-full px-4 py-3 rounded-xl border bg-gray-900/80 border-blue-400/60 hover:border-blue-300/80 text-white font-bold focus:border-blue-300 outline-none transition-all cursor-pointer text-sm appearance-none bg-no-repeat pr-10 bg-right shadow-lg hover:shadow-xl backdrop-blur-md hover:animate-shake",
@@ -4902,7 +4899,7 @@ Per Day Rate,${g.perDayRate}`;
                       color: "cyan",
                     },
                   ].map((y, f) =>
-                    e.jsx(ua, Q(W({}, y), { delay: f * 0.1 }), y.label),
+                    e.jsx(ua, Q(G({}, y), { delay: f * 0.1 }), y.label),
                   ),
                 }),
             v && e.jsx(fa, { type: v, dates: u, onClose: () => E(null) }),
@@ -5100,7 +5097,7 @@ function ua({
   icon: t,
   label: r,
   value: a,
-  gradient: c,
+  gradient: m,
   border: x,
   text: s,
   onClick: b,
@@ -5119,7 +5116,7 @@ function ua({
   };
   return e.jsxs("div", {
     onClick: b,
-    className: `p-6 rounded-3xl bg-gradient-to-br ${c}/20 ${x}/50 border backdrop-blur-lg shadow-xl hover:shadow-2xl transition-all duration-500 group relative overflow-hidden cursor-pointer hover:scale-110 active:scale-95 animate-stagger-fade ${v[d]} hover:${v[d]} hover:rotate-1`,
+    className: `p-6 rounded-3xl bg-gradient-to-br ${m}/20 ${x}/50 border backdrop-blur-lg shadow-xl hover:shadow-2xl transition-all duration-500 group relative overflow-hidden cursor-pointer hover:scale-110 active:scale-95 animate-stagger-fade ${v[d]} hover:${v[d]} hover:rotate-1`,
     style: { animationDelay: `${h}s` },
     children: [
       e.jsx("div", {
@@ -5127,7 +5124,7 @@ function ua({
           "absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500 bg-gradient-to-br from-white/20 to-transparent",
       }),
       e.jsx("div", {
-        className: `absolute -inset-4 opacity-0 group-hover:opacity-30 blur-3xl transition-all duration-500 bg-gradient-to-br ${c} rounded-3xl`,
+        className: `absolute -inset-4 opacity-0 group-hover:opacity-30 blur-3xl transition-all duration-500 bg-gradient-to-br ${m} rounded-3xl`,
         style: { zIndex: -1 },
       }),
       e.jsxs("div", {
@@ -5252,9 +5249,9 @@ function fa({ type: t, dates: r, onClose: a }) {
   });
 }
 function va() {
-  var i, I, l, $, R, _, O;
+  var i, I, l, $, _, R, W;
   const [t, r] = n.useState(1),
-    [a, c] = n.useState(""),
+    [a, m] = n.useState(""),
     [x, s] = n.useState(""),
     [b, h] = n.useState(""),
     [d, v] = n.useState(!1),
@@ -5275,7 +5272,7 @@ function va() {
       "EMP004-05": "cancelled",
       "EMP005-25": "booked",
     },
-    z = new Set(Object.keys(f).map((m) => m.split("-")[1])),
+    z = new Set(Object.keys(f).map((c) => c.split("-")[1])),
     o = [
       {
         id: "EMP001",
@@ -5328,11 +5325,11 @@ function va() {
       },
     ],
     L = o.filter(
-      (m) =>
-        m.name.toLowerCase().includes(D.toLowerCase()) ||
-        m.id.toLowerCase().includes(D.toLowerCase()) ||
-        m.email.toLowerCase().includes(D.toLowerCase()) ||
-        m.role.toLowerCase().includes(D.toLowerCase()),
+      (c) =>
+        c.name.toLowerCase().includes(D.toLowerCase()) ||
+        c.id.toLowerCase().includes(D.toLowerCase()) ||
+        c.email.toLowerCase().includes(D.toLowerCase()) ||
+        c.role.toLowerCase().includes(D.toLowerCase()),
     ),
     B = [
       {
@@ -5388,13 +5385,13 @@ function va() {
     t === 2 && (k(!0), j(""));
   }, [t]);
   const J = [];
-  for (let m = 0; m < y; m++) J.push(null);
-  for (let m = 1; m <= A; m++) J.push(m);
-  const ee = [];
-  for (let m = 0; m < J.length; m += 7) ee.push(J.slice(m, m + 7));
+  for (let c = 0; c < y; c++) J.push(null);
+  for (let c = 1; c <= A; c++) J.push(c);
+  const te = [];
+  for (let c = 0; c < J.length; c += 7) te.push(J.slice(c, c + 7));
   const se = () => {
-      const m = `${x}-${a}`;
-      return f[m];
+      const c = `${x}-${a}`;
+      return f[c];
     },
     le = () => !!se(),
     he = async () => {
@@ -5404,41 +5401,41 @@ function va() {
       }
       v(!0), p(""), u("");
       try {
-        await new Promise((te) => setTimeout(te, 1500));
-        const m = `${x}-${a}`;
-        f[m] = b;
-        const X = N.toLocaleString("default", {
+        await new Promise((ae) => setTimeout(ae, 1500));
+        const c = `${x}-${a}`;
+        f[c] = b;
+        const O = N.toLocaleString("default", {
           month: "long",
           year: "numeric",
         });
-        u(`✅ Status updated successfully for ${a} ${X}`),
+        u(`✅ Status updated successfully for ${a} ${O}`),
           F(!1),
           setTimeout(() => {
-            r(1), c(""), s(""), h("");
+            r(1), m(""), s(""), h("");
           }, 2e3);
-      } catch (m) {
+      } catch (c) {
         p("Failed to update status. Please try again."), F(!1);
       } finally {
         v(!1);
       }
     },
-    q = () => {
-      t > 1 && (r(t - 1), t === 2 && c(""), t === 3 && s(""));
+    X = () => {
+      t > 1 && (r(t - 1), t === 2 && m(""), t === 3 && s(""));
     },
-    G = N.toLocaleString("default", { month: "long", year: "numeric" }),
+    K = N.toLocaleString("default", { month: "long", year: "numeric" }),
     be = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    oe = (m) => {
-      if (!m) return "";
-      const X = m === C && N.getMonth() === M.getMonth(),
-        te =
-          new Date(N.getFullYear(), N.getMonth(), m).getDay() === 0 ||
-          new Date(N.getFullYear(), N.getMonth(), m).getDay() === 6,
-        Ee = z.has(m.toString().padStart(2, "0")),
-        ct = a === m.toString().padStart(2, "0");
+    oe = (c) => {
+      if (!c) return "";
+      const O = c === C && N.getMonth() === M.getMonth(),
+        ae =
+          new Date(N.getFullYear(), N.getMonth(), c).getDay() === 0 ||
+          new Date(N.getFullYear(), N.getMonth(), c).getDay() === 6,
+        Ee = z.has(c.toString().padStart(2, "0")),
+        ct = a === c.toString().padStart(2, "0");
       let ne =
         "relative p-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-110 active:scale-95 cursor-pointer border-2 ";
       return (
-        X
+        O
           ? (ne +=
               "bg-gradient-to-br from-yellow-400 to-orange-500 text-white border-yellow-300 shadow-lg shadow-yellow-500/50")
           : ct
@@ -5447,7 +5444,7 @@ function va() {
             : Ee
               ? (ne +=
                   "bg-gradient-to-br from-green-500 to-emerald-600 text-white border-green-300 shadow-lg shadow-green-500/50")
-              : te
+              : ae
                 ? (ne +=
                     "bg-gray-700/60 text-gray-300 border-gray-600/50 hover:bg-gray-600/70")
                 : (ne +=
@@ -5477,7 +5474,7 @@ function va() {
               "absolute top-1/2 left-1/3 w-80 h-80 rounded-full mix-blend-screen filter blur-3xl opacity-80 animate-blob-medium bg-gradient-to-br from-violet-400 via-purple-500 to-indigo-600",
             style: { animationDuration: "45s", animationDelay: "2s" },
           }),
-          Array.from({ length: 15 }).map((m, X) =>
+          Array.from({ length: 15 }).map((c, O) =>
             e.jsx(
               "div",
               {
@@ -5490,7 +5487,7 @@ function va() {
                   animationDuration: `${5 + Math.random() * 10}s`,
                 },
               },
-              X,
+              O,
             ),
           ),
         ],
@@ -5509,7 +5506,7 @@ function va() {
             className: "flex items-center gap-4 mb-8 animate-fade-in-down",
             children: [
               e.jsx("button", {
-                onClick: q,
+                onClick: X,
                 className:
                   "p-3 rounded-2xl border backdrop-blur-md shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center font-semibold bg-gradient-to-br from-slate-600/80 to-gray-700/80 hover:from-slate-500/90 hover:to-gray-600/90 border-slate-400/70 text-white shadow-slate-500/40 active:scale-95 hover:scale-110",
                 children: e.jsx(me, { className: "w-5 h-5" }),
@@ -5524,7 +5521,7 @@ function va() {
                   }),
                   e.jsx("p", {
                     className: "text-gray-500 text-sm mt-1",
-                    children: G,
+                    children: K,
                   }),
                 ],
               }),
@@ -5588,7 +5585,7 @@ function va() {
                                 className: "text-slate-200 text-sm",
                                 children: [
                                   "Choose a date in ",
-                                  G,
+                                  K,
                                   " ",
                                   e.jsxs("span", {
                                     className: "text-yellow-300",
@@ -5614,7 +5611,7 @@ function va() {
                           }),
                           e.jsx("span", {
                             className: "text-lg font-semibold text-white",
-                            children: G,
+                            children: K,
                           }),
                           e.jsx("button", {
                             onClick: () =>
@@ -5629,45 +5626,45 @@ function va() {
                       }),
                       e.jsx("div", {
                         className: "grid grid-cols-7 gap-2 mb-4",
-                        children: be.map((m) =>
+                        children: be.map((c) =>
                           e.jsx(
                             "div",
                             {
-                              className: `text-center text-sm font-semibold py-2 ${m === "Sun" || m === "Sat" ? "text-purple-400" : "text-gray-400"}`,
-                              children: m,
+                              className: `text-center text-sm font-semibold py-2 ${c === "Sun" || c === "Sat" ? "text-purple-400" : "text-gray-400"}`,
+                              children: c,
                             },
-                            m,
+                            c,
                           ),
                         ),
                       }),
                       e.jsx("div", {
                         className: "space-y-2",
-                        children: ee.map((m, X) =>
+                        children: te.map((c, O) =>
                           e.jsx(
                             "div",
                             {
                               className: "grid grid-cols-7 gap-2",
-                              children: m.map((te, Ee) =>
+                              children: c.map((ae, Ee) =>
                                 e.jsx(
                                   "div",
                                   {
                                     className: "relative group",
-                                    children: te
+                                    children: ae
                                       ? e.jsxs("button", {
                                           onClick: () => {
-                                            c(te.toString().padStart(2, "0")),
+                                            m(ae.toString().padStart(2, "0")),
                                               r(2);
                                           },
-                                          className: oe(te),
+                                          className: oe(ae),
                                           title: z.has(
-                                            te.toString().padStart(2, "0"),
+                                            ae.toString().padStart(2, "0"),
                                           )
                                             ? "Status already set"
                                             : "",
                                           children: [
-                                            te,
+                                            ae,
                                             z.has(
-                                              te.toString().padStart(2, "0"),
+                                              ae.toString().padStart(2, "0"),
                                             ) &&
                                               e.jsx("div", {
                                                 className:
@@ -5681,7 +5678,7 @@ function va() {
                                 ),
                               ),
                             },
-                            X,
+                            O,
                           ),
                         ),
                       }),
@@ -5724,7 +5721,7 @@ function va() {
                                   "Choose employee for ",
                                   a,
                                   " ",
-                                  G.split(" ")[0],
+                                  K.split(" ")[0],
                                 ],
                               }),
                             ],
@@ -5740,7 +5737,7 @@ function va() {
                               "w-full px-4 py-4 rounded-xl bg-gray-800/60 border border-gray-600/50 text-white font-semibold focus:border-slate-400/70 focus:outline-none transition-all backdrop-blur-md flex items-center justify-between text-lg",
                             children: [
                               (x &&
-                                ((i = o.find((m) => m.id === x)) == null
+                                ((i = o.find((c) => c.id === x)) == null
                                   ? void 0
                                   : i.name)) ||
                                 "Select User",
@@ -5761,7 +5758,7 @@ function va() {
                                     placeholder:
                                       "Search by name, ID, email, or role...",
                                     value: D,
-                                    onChange: (m) => j(m.target.value),
+                                    onChange: (c) => j(c.target.value),
                                     className:
                                       "w-full px-3 py-2 rounded-lg bg-gray-800/60 border border-gray-600/50 text-white font-semibold focus:border-slate-400/70 focus:outline-none transition-all placeholder-gray-400 text-sm",
                                   }),
@@ -5770,19 +5767,19 @@ function va() {
                                   className: "max-h-72 overflow-y-auto",
                                   children:
                                     L.length > 0
-                                      ? L.map((m) =>
+                                      ? L.map((c) =>
                                           e.jsxs(
                                             "button",
                                             {
                                               onClick: () => {
-                                                s(m.id), k(!1), r(3);
+                                                s(c.id), k(!1), r(3);
                                               },
-                                              className: `w-full p-4 border-b border-gray-700/30 transition-all text-left last:border-b-0 hover:bg-gray-800/60 flex items-center gap-3 group ${x === m.id ? "bg-gradient-to-br from-slate-600 to-gray-700 text-white" : "text-gray-300 hover:text-white"}`,
+                                              className: `w-full p-4 border-b border-gray-700/30 transition-all text-left last:border-b-0 hover:bg-gray-800/60 flex items-center gap-3 group ${x === c.id ? "bg-gradient-to-br from-slate-600 to-gray-700 text-white" : "text-gray-300 hover:text-white"}`,
                                               children: [
                                                 e.jsx("span", {
                                                   className:
                                                     "text-2xl flex-shrink-0 group-hover:scale-125 transition-transform",
-                                                  children: m.avatar,
+                                                  children: c.avatar,
                                                 }),
                                                 e.jsxs("div", {
                                                   className: "flex-1 min-w-0",
@@ -5790,27 +5787,27 @@ function va() {
                                                     e.jsx("p", {
                                                       className:
                                                         "font-bold text-sm",
-                                                      children: m.name,
+                                                      children: c.name,
                                                     }),
                                                     e.jsxs("p", {
                                                       className:
                                                         "text-xs opacity-70",
                                                       children: [
-                                                        m.id,
+                                                        c.id,
                                                         " • ",
-                                                        m.role,
+                                                        c.role,
                                                       ],
                                                     }),
                                                     e.jsx("p", {
                                                       className:
                                                         "text-xs opacity-50 truncate",
-                                                      children: m.email,
+                                                      children: c.email,
                                                     }),
                                                   ],
                                                 }),
                                               ],
                                             },
-                                            m.id,
+                                            c.id,
                                           ),
                                         )
                                       : e.jsx("p", {
@@ -5861,7 +5858,7 @@ function va() {
                                   className: "text-slate-200 text-sm",
                                   children: [
                                     "for ",
-                                    (I = o.find((m) => m.id === x)) == null
+                                    (I = o.find((c) => c.id === x)) == null
                                       ? void 0
                                       : I.name,
                                   ],
@@ -5879,7 +5876,7 @@ function va() {
                               children: [
                                 "⚠️ Previously set to:",
                                 " ",
-                                (l = B.find((m) => m.value === se())) == null
+                                (l = B.find((c) => c.value === se())) == null
                                   ? void 0
                                   : l.label,
                               ],
@@ -5887,33 +5884,33 @@ function va() {
                           }),
                         e.jsx("div", {
                           className: "grid grid-cols-2 md:grid-cols-3 gap-4",
-                          children: B.map((m) =>
+                          children: B.map((c) =>
                             e.jsx(
                               "button",
                               {
                                 onClick: () => {
-                                  h(m.value), F(!0);
+                                  h(c.value), F(!0);
                                 },
-                                className: `p-6 rounded-2xl border-2 transition-all transform hover:scale-105 active:scale-95 relative overflow-hidden group ${b === m.value ? `bg-gradient-to-br ${m.color} border-white/50 text-white shadow-xl ${m.glow}` : "bg-gray-800/60 border-gray-700/50 text-gray-300 hover:bg-gray-700/80 hover:border-gray-600/70"}`,
+                                className: `p-6 rounded-2xl border-2 transition-all transform hover:scale-105 active:scale-95 relative overflow-hidden group ${b === c.value ? `bg-gradient-to-br ${c.color} border-white/50 text-white shadow-xl ${c.glow}` : "bg-gray-800/60 border-gray-700/50 text-gray-300 hover:bg-gray-700/80 hover:border-gray-600/70"}`,
                                 children: e.jsxs("div", {
                                   className: "relative z-10 text-center",
                                   children: [
                                     e.jsx("p", {
                                       className: "text-4xl mb-2",
-                                      children: m.icon,
+                                      children: c.icon,
                                     }),
                                     e.jsx("p", {
                                       className: "font-semibold",
-                                      children: m.label,
+                                      children: c.label,
                                     }),
                                     e.jsx("p", {
                                       className: "text-xs opacity-70 mt-1",
-                                      children: m.description,
+                                      children: c.description,
                                     }),
                                   ],
                                 }),
                               },
-                              m.value,
+                              c.value,
                             ),
                           ),
                         }),
@@ -5952,7 +5949,7 @@ function va() {
                                 e.jsx("span", { children: "⚠️" }),
                                 " Override:",
                                 " ",
-                                ($ = B.find((m) => m.value === se())) == null
+                                ($ = B.find((c) => c.value === se())) == null
                                   ? void 0
                                   : $.label,
                               ],
@@ -5971,7 +5968,7 @@ function va() {
                                 }),
                                 e.jsxs("span", {
                                   className: "text-cyan-400",
-                                  children: [a, " ", G.split(" ")[0]],
+                                  children: [a, " ", K.split(" ")[0]],
                                 }),
                               ],
                             }),
@@ -5986,9 +5983,9 @@ function va() {
                                 e.jsx("span", {
                                   className: "text-pink-400",
                                   children:
-                                    (R = o.find((m) => m.id === x)) == null
+                                    (_ = o.find((c) => c.id === x)) == null
                                       ? void 0
-                                      : R.name,
+                                      : _.name,
                                 }),
                               ],
                             }),
@@ -6004,13 +6001,13 @@ function va() {
                                   className:
                                     "text-purple-400 flex items-center gap-1",
                                   children: [
-                                    (_ = B.find((m) => m.value === b)) == null
+                                    (R = B.find((c) => c.value === b)) == null
                                       ? void 0
-                                      : _.label,
+                                      : R.label,
                                     " ",
-                                    (O = B.find((m) => m.value === b)) == null
+                                    (W = B.find((c) => c.value === b)) == null
                                       ? void 0
-                                      : O.icon,
+                                      : W.icon,
                                   ],
                                 }),
                               ],
@@ -6125,11 +6122,11 @@ function wa() {
   return Rt(a);
 }
 let Y = null,
-  ae = 0,
+  re = 0,
   Re = null,
   je = [];
 function V(t, r = {}) {
-  H.emit(`SOCKET:${t}`, W({ type: t }, r));
+  H.emit(`SOCKET:${t}`, G({ type: t }, r));
 }
 function ya() {
   var r;
@@ -6139,7 +6136,7 @@ function ya() {
     window.location.origin;
   (Y = Ut(t, P.ws)),
     Y.on("connect", () => {
-      (ae = 0), V("STATUS", { connected: !0, id: Y.id }), ja();
+      (re = 0), V("STATUS", { connected: !0, id: Y.id }), ja();
     }),
     Y.on("message", (a) => {
       V("MESSAGE", { data: a });
@@ -6147,17 +6144,17 @@ function ya() {
     Y.on("notification", (a) => V("NOTIFICATION", { data: a })),
     Y.on("update", (a) => V("UPDATE", { data: a })),
     Y.on("connect_error", (a) => {
-      V("ERROR", { message: a.message || "Connection error", attempt: ae }),
+      V("ERROR", { message: a.message || "Connection error", attempt: re }),
         Ze();
     }),
     Y.on("disconnect", (a) => {
       V("DISCONNECT", { reason: a }), a !== "io client disconnect" && Ze();
     }),
     Y.on("reconnect_attempt", () => {
-      V("RECONNECT_ATTEMPT", { attempt: ae });
+      V("RECONNECT_ATTEMPT", { attempt: re });
     }),
     Y.on("reconnect_failed", () => {
-      V("RECONNECT_FAILED", { attempt: ae });
+      V("RECONNECT_FAILED", { attempt: re });
     }),
     Y.on("ping", () => {
       V("PING", { ts: Date.now() });
@@ -6175,13 +6172,13 @@ function ja() {
   }
 }
 function Ze() {
-  var c, x, s, b;
+  var m, x, s, b;
   if (Re) return;
   const t =
       (x =
-        (c = P == null ? void 0 : P.realtime) == null
+        (m = P == null ? void 0 : P.realtime) == null
           ? void 0
-          : c.maxRetries) != null
+          : m.maxRetries) != null
         ? x
         : 5,
     r =
@@ -6191,21 +6188,21 @@ function Ze() {
           : s.retryDelay) != null
         ? b
         : 2e3;
-  if (ae >= t) {
-    V("reconnect_failed", { retries: ae });
+  if (re >= t) {
+    V("reconnect_failed", { retries: re });
     return;
   }
-  const a = Math.min(r * Math.pow(2, ae), 3e4);
-  ae++,
-    V("reconnect_scheduled", { delay: a, attempt: ae }),
+  const a = Math.min(r * Math.pow(2, re), 3e4);
+  re++,
+    V("reconnect_scheduled", { delay: a, attempt: re }),
     (Re = setTimeout(() => {
       (Re = null),
-        V("reconnecting", { attempt: ae }),
+        V("reconnecting", { attempt: re }),
         Y && !Y.connected && Y.connect();
     }, a));
 }
 function Na() {
-  const t = () => H.emit(K.TAB_VISIBILITY, { hidden: document.hidden });
+  const t = () => H.emit(q.TAB_VISIBILITY, { hidden: document.hidden });
   document.addEventListener("visibilitychange", t), t();
 }
 const ka = async () => {
@@ -6229,14 +6226,14 @@ function Sa() {
     (window.addEventListener(
       "keydown",
       (t) => {
-        H.emit(K.INPUT_TRACE, { type: "key", key: t.key, ts: Date.now() });
+        H.emit(q.INPUT_TRACE, { type: "key", key: t.key, ts: Date.now() });
       },
       !0,
     ),
     window.addEventListener(
       "click",
       (t) => {
-        H.emit(K.INPUT_TRACE, {
+        H.emit(q.INPUT_TRACE, {
           type: "mouse",
           button: t.button,
           x: t.clientX,
@@ -6300,17 +6297,17 @@ function Ia() {
     window.addEventListener(
       "keydown",
       (a) => {
-        Ca.some((c) => Da(a, c)) && (a.preventDefault(), a.stopPropagation());
+        Ca.some((m) => Da(a, m)) && (a.preventDefault(), a.stopPropagation());
       },
       !0,
     );
   let t = !1;
   setInterval(() => {
-    const c =
+    const m =
       window.outerWidth - window.innerWidth > 160 ||
       window.outerHeight - window.innerHeight > 160;
-    c !== t &&
-      ((t = c),
+    m !== t &&
+      ((t = m),
       t &&
         (console.log(
           "%c-----------------------------------",
@@ -6323,7 +6320,7 @@ function Ia() {
           "color: #ff8800;",
         ),
         console.log("%c-----------------------------------", "color: #555555;"),
-        H.emit(K.INSPECT_DETECTED, { open: !0 })));
+        H.emit(q.INSPECT_DETECTED, { open: !0 })));
   }, 1e3);
 }
 const Ue = {
@@ -6335,11 +6332,11 @@ const Ue = {
   },
   Ea = () => {
     const [t, r] = n.useState(60),
-      [a, c] = n.useState(1);
+      [a, m] = n.useState(1);
     return (
       n.useEffect(() => {
         const x = setInterval(() => {
-          r((s) => (s > 0 ? s - 1 : 60)), c(Math.random() * 0.5 + 0.7);
+          r((s) => (s > 0 ? s - 1 : 60)), m(Math.random() * 0.5 + 0.7);
         }, 1e3);
         return () => clearInterval(x);
       }, []),
@@ -6587,7 +6584,7 @@ const Ue = {
     const [r, a] = n.useState(0);
     return (
       n.useEffect(
-        () => H.on(K.API_LOADING, ({ inFlight: x }) => a(x || 0)),
+        () => H.on(q.API_LOADING, ({ inFlight: x }) => a(x || 0)),
         [],
       ),
       e.jsxs("div", {
@@ -6729,7 +6726,7 @@ const Ue = {
 function Ta({ children: t }) {
   var j, T;
   const [r, a] = n.useState(!1),
-    [c, x] = n.useState(!1),
+    [m, x] = n.useState(!1),
     [s, b] = n.useState("idle"),
     [h, d] = n.useState(0),
     [v, E] = n.useState(null),
@@ -6789,7 +6786,7 @@ function Ta({ children: t }) {
         Z.remove("lastSkipDate"),
         Z.set("appVersion", v);
     };
-  if (!c || !v) return t;
+  if (!m || !v) return t;
   const D = Z.get("appVersion") || P.appVersion;
   return e.jsxs("div", {
     className:
@@ -7192,7 +7189,7 @@ function Ta({ children: t }) {
 }
 function Aa() {
   const [t, r] = n.useState(0),
-    [a, c] = n.useState(!1);
+    [a, m] = n.useState(!1);
   n.useEffect(() => {
     const b = setInterval(() => {
       r((h) => h + 1);
@@ -7200,7 +7197,7 @@ function Aa() {
     return () => clearInterval(b);
   }, []);
   const x = () => {
-      c(!0),
+      m(!0),
         setTimeout(() => {
           window.location.reload();
         }, 500);
@@ -7445,13 +7442,13 @@ function Aa() {
 const La = () => {
   const { setUser: t } = xe(),
     [r, a] = n.useState("SYSTEM_UPDATE"),
-    [c, x] = n.useState(!1),
+    [m, x] = n.useState(!1),
     [s, b] = n.useState(!1);
   return (
     n.useEffect(() => {
       (async () => {
         try {
-          const { error: d, data: v = [] } = await re.post(
+          const { error: d, data: v = [] } = await ee.post(
             "/foodease/auth/user",
           );
           d
@@ -7492,7 +7489,7 @@ const La = () => {
       ),
       [],
     ),
-    !c || !s
+    !m || !s
       ? e.jsx(Yt, {})
       : r === "LOADING"
         ? e.jsx(et, {})
